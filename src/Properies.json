@@ -1,0 +1,14 @@
+       {"databaseFileName":"Stock_Database.db",
+        "iexPrefix":"https://api.iextrading.com/1.0/",
+        "iexPrefixSymbols":"ref-data/symbols",
+        "yearHistoryInt":"2",
+        "yearHistoryString":"2Y",
+        "hourBloombergDataAvail":"19",
+        "iexMaxStockAtaTime":"100",
+        "maxStocktoProcess":"200000",
+        "symbolToCheckLastMarketOpenDate":"AAPL",
+        "maxDayBeforeObsolete":"30",
+        "stringBufferSize":"10000",
+        "timeout":"1000"
+        }
+        
