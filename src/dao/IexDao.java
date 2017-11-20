@@ -11,6 +11,6 @@ package dao;
  */
 public interface IexDao {
  
-    public boolean getSymbolList();
+    public int getSymbolList();
     public boolean getCompanyList();
 }

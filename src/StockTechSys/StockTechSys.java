@@ -19,15 +19,10 @@ of stocks and their sectors. Find how to build sector list.
 */
 
 import static StockTechSys.Parameters.DATABASEFILENAME;
-import externalData.BloombergData;
-import static externalData.GooglePrice.GetGoogleLastOpenMarketDate;
-import externalData.Index;
-import externalData.SectorData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import models.Stock;
-import models.SqlDatabase;
 import java.io.IOException;
 import static java.lang.System.exit;
 import java.net.MalformedURLException;
@@ -35,7 +30,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.MissingResourceException;
 import java.util.concurrent.TimeoutException;
-import models.Company;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

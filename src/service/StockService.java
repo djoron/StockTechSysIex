@@ -35,7 +35,6 @@ import utilities.ProgressBar;
 public class StockService {
     private DatabaseService databaseService;
     private IexSymbolDaoImpl internetStocklist;
-    private 
     private StockService    stockService;
 
 
