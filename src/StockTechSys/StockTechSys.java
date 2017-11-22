@@ -33,8 +33,7 @@ import java.util.concurrent.TimeoutException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import service.DatabaseService;
-import service.PriceHistoryService;
+
 import service.StockService;
 import static utilities.DialogWindow.AskUserInputNewDatabase;
 import utilities.FileOperations;
@@ -109,13 +108,12 @@ public class StockTechSys {
 
         // Main Service to access Database. Will be global and 
         // passed as parameter to other services.
-        DatabaseService databaseService = new DatabaseService();
         
         // Initialize service for Stock list management
-        StockService stockService = new StockService(databaseService);
+        StockService stockService = new StockService();
         
         // Initialize service for Stock price management
-        PriceHistoryService priceHistoryService = new PriceHistoryService(databaseService);
+ //       PriceHistoryService priceHistoryService = new PriceHistoryService(databaseService);
                 
         // Parameters from Json File will be loaded first time we call up a parameter
         
@@ -141,14 +139,14 @@ public class StockTechSys {
 //        stockPriceHistoryDao = new GooglePriceHistoryDaoImpl();
         
         if (createNewDb == true) {
-            logger.debug("Creating new Database. Hold on this will take a while");
-            databaseService.initializeDatabase();
+            logger.debug("Creating new Database. Hold on.");
+//            databaseService.initializeDatabase();
 
             // Main method to retrieve stocklist from internet and save to DB.
             stockService.createStocklist();
 
             
-            status = priceHistoryService.downloadFullDailyPriceHistoryandSavetoDb(); 
+  //          status = priceHistoryService.downloadFullDailyPriceHistoryandSavetoDb(); 
 
         } else {    
 /*
@@ -202,7 +200,7 @@ public class StockTechSys {
             stockService.getLocalStocklist(stockList);
 */
          }
-
+/*
             //        status = saveLastDayStockListYahooPricetoDb(stockList);
         // Double check if Daily History is complete for all stocks except for last day.
         // Last day is done in saveLastDayStockListPricetoDB
@@ -220,7 +218,7 @@ public class StockTechSys {
         
         // Check for stock splits here and redownload symbol history if so.
         // a refaire xxx status=databaseService.CheckForStockSplit(stockList);
-        
+  */
         // Done, close stockDB and Exit program.
         // status = SqlDatabase.closeStockDb();
         String endTimeStamp = null;

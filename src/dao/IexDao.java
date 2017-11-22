@@ -5,12 +5,17 @@
  */
 package dao;
 
+import java.net.MalformedURLException;
+import java.util.List;
+import models.Company;
+import models.Symbol;
+
 /**
  *
  * @author dominicj
  */
 public interface IexDao {
  
-    public int getSymbolList();
-    public boolean getCompanyList();
+    public List<Symbol> getSymbolList() throws Exception;
+    public List<Company> getCompanyList(List<Symbol> symbolList) throws MalformedURLException;
 }

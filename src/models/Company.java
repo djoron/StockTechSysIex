@@ -5,6 +5,8 @@
  */
 package models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  *
  * @author atlantis
@@ -18,7 +20,8 @@ public class Company {
     protected String industry;
     protected String website;
     protected String description;
-    protected String CEO;
+    @JsonProperty("CEO")
+    protected String ceo;
     protected String issueType;
     protected String sector;
 
@@ -70,12 +73,12 @@ public class Company {
         this.description = description;
     }
 
-    public String getCEO() {
-        return CEO;
+    public String getceo() {
+        return ceo;
     }
 
-    public void setCEO(String CEO) {
-        this.CEO = CEO;
+    public void setCEO(String ceo) {
+        this.ceo = ceo;
     }
 
     public String getIssueType() {

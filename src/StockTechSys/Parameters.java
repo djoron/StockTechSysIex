@@ -26,7 +26,7 @@ import models.Stock;
  */
 public class Parameters {
 
-    public static String PARAMETERSPATH = ".\\InitJson.json";
+    public static String PARAMETERSPATH = ".\\Properties.json";
  
     public static String DATABASEFILENAME; // Database file name 
     public static String IEXPREFIX ; // Prefix before calling IEX API 
