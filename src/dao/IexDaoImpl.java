@@ -61,33 +61,40 @@ public abstract class IexDaoImpl implements IexDao {
      */
     @Override
     public List<Company> getCompanyList(List<Symbol> symbolList) throws MalformedURLException {
-        int count = 0;
         String urlstr; 
 
         // Will contain symbol only List from Internet.
         List<Company> companyList = new ArrayList<>(); 
-            
+        int totalsize = symbolList.size();
+        
 //        https://api.iextrading.com/1.0/stock/aapl/company
+        int count = 0;
         
         for (Symbol symbol: symbolList ) {    
-
+            
             urlstr = IEXPREFIX+"stock/"+symbol.getSymbol()+"/company";
             ObjectMapper objectMapper = new ObjectMapper();
+            Company company=null;
             
+            count++;
             try {
-                Company company = objectMapper.readValue(new URL(urlstr), new TypeReference<Company>(){});
-                companyList.add(company);
-                logger.info("Adding {} symbols",company.getCompanyName());
-                
+                company = objectMapper.readValue(new URL(urlstr), new TypeReference<Company>(){});
+                if (company.getCompanyName() != null) {
+                   companyList.add(company);
+                   logger.info("Adding {} of {}: ({})-{}",count,totalsize,company.getSymbol(),company.getCompanyName());
+                } else
+                {
+                   logger.info("Skipping: ({})-{}",company.getSymbol(),company.getCompanyName());
+                   count--;
+                }    
                 
             } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                logger.warn("Skipping unknown symbol from API: ({})",symbol.getSymbol());
+                count--;
             }   
-    
-            count++;
         }
-         
+        
+        logger.info("Total symbols returned {} of {} ",count,totalsize); 
         return companyList;    
     }
 
