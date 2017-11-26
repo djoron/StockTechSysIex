@@ -8,17 +8,10 @@ package service;
 import static StockTechSys.StockTechSys.logger;
 import dao.IexDao;
 import dao.IexDaoImpl;
-import java.io.IOException;
-import static java.lang.System.exit;
-import java.net.MalformedURLException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.MissingResourceException;
-import java.util.concurrent.TimeoutException;
 import models.Company;
 import models.Symbol;
-
         
 /**
  *

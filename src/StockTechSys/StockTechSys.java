@@ -1,5 +1,4 @@
 
-
 package StockTechSys;
 
 /*
@@ -9,10 +8,9 @@ package StockTechSys;
   
     Software uses Logback
     First set properties to read logback.xml file in project directory.
-    Then set 
    
-http://investexcel.net/all-yahoo-finance-stock-tickers/ provides a complete list
-of stocks and their sectors. Find how to build sector list.
+    Data provided for free by IEX.
+    https://iextrading.com/api-exhibit-a 
 
 
 
@@ -125,6 +123,9 @@ public class StockTechSys {
         {
             logger.debug("Logger activated");
         }
+ 
+        logger.info("Data provided for free by IEX: https://iextrading.com/api-exhibit-a" );
+
         
         FileOperations fileOperation = new FileOperations();
         beginTimeStamp = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(Calendar.getInstance().getTime());
