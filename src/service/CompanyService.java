@@ -6,6 +6,8 @@
 package service;
 
 import static StockTechSys.StockTechSys.logger;
+import dao.CompanyDao;
+import dao.CompanyDaoImpl;
 import dao.IexDao;
 import dao.IexDaoImpl;
 import java.util.ArrayList;
@@ -17,8 +19,8 @@ import models.Symbol;
  *
  * @author atlantis
  */
-public class StockService {
-    private StockService    stockService;
+public class CompanyService {
+    private CompanyService    companyService;
 
 /*
     public StockService(DatabaseService databaseService)
@@ -28,15 +30,13 @@ public class StockService {
     }
 */
     
-    public StockService() {
+    public CompanyService() {
     }
         
     public boolean createStocklist() throws Exception {
         boolean status;
         
-        // Will contain Entire Stock List to/from SQLDB.
-        List<Company> companyListSql = new ArrayList<>(); 
-        
+        // Dao to access internat Data
         IexDao iexDao = new IexDaoImpl() {};
         
         // Will contain symbol only List from Internet.
@@ -52,6 +52,9 @@ public class StockService {
             {
                 // Save in SQL DB.
                 logger.info("createStockList - getCompanyList. Downloaded {} elements.",companyList.size());
+                logger.info("createStockList - getCompanyList. Saving into DB.",companyList.size());
+                CompanyDao companyDao = new CompanyDaoImpl();
+                companyDao.saveCompanyList(companyList);
 
             } else {
                 // If returns 0 no data so cannot build stocklist. Must exit
@@ -65,9 +68,10 @@ public class StockService {
         }
 
         
-           
+        return false;
 
-        return true;
+
+
         
     }
     

@@ -32,7 +32,7 @@ import java.util.concurrent.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import service.StockService;
+import service.CompanyService;
 import static utilities.DialogWindow.AskUserInputNewDatabase;
 import utilities.FileOperations;
 
@@ -108,7 +108,7 @@ public class StockTechSys {
         // passed as parameter to other services.
         
         // Initialize service for Stock list management
-        StockService stockService = new StockService();
+        CompanyService companyService = new CompanyService();
         
         // Initialize service for Stock price management
  //       PriceHistoryService priceHistoryService = new PriceHistoryService(databaseService);
@@ -144,7 +144,7 @@ public class StockTechSys {
 //            databaseService.initializeDatabase();
 
             // Main method to retrieve stocklist from internet and save to DB.
-            stockService.createStocklist();
+            companyService.createStocklist();
 
             
   //          status = priceHistoryService.downloadFullDailyPriceHistoryandSavetoDb(); 

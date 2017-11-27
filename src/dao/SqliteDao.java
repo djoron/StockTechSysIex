@@ -15,7 +15,10 @@ import java.sql.SQLException;
  */
 public interface SqliteDao {
     
-    public boolean openStockDb (Connection c);
-    public boolean closeStockDb (Connection c);
-    public PreparedStatement execPrepStat( String sql, boolean returnGeneratedKeys, Object... objets ) throws SQLException;
+    public Connection openSqlDatabase ();
+    public boolean closeSqlDatabase (Connection c);
+    public Boolean execStatement(String strsql) throws SQLException;
+    public PreparedStatement execPrepStatement(String sql, boolean returnGeneratedKeys, Object... objets ) throws SQLException;
+    public boolean createCompanyListTable () throws SQLException;
+
 }

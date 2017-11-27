@@ -91,6 +91,7 @@ public abstract class IexDaoImpl implements IexDao {
                 logger.warn("Skipping unknown symbol from API: ({})",symbol.getSymbol());
                 count--;
             }   
+            if (count > 10) break;
         }
         
         logger.info("Total symbols returned {} of {} ",count,totalsize); 
