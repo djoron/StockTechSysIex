@@ -12,8 +12,6 @@ package StockTechSys;
     Data provided for free by IEX.
     https://iextrading.com/api-exhibit-a 
 
-
-
 */
 
 import static StockTechSys.Parameters.DATABASEFILENAME;
@@ -49,30 +47,6 @@ public class StockTechSys {
      */
  // GLOBAL CONSTANT   
     // See parameters.java for initialization of program parameters.
-/*
-    public static int    YEAR_HISTORY_INT = 2; // How far in time Daily price download. MUST BE of INT with same length (number) as below. 
-    public static String YEAR_HISTORY_STRING = "2Y"; // How far in time Daily price download. MUST BE of format NUMBER+Y
-    public static int    HOURBLOOMBERGDATAAVAIL = 19; // After this time, Bloomberg Data avail for today.
-    public static int TIMERANDOMDELAY = 3000; // Delay between google fetch 
-//    public static int PRICEINDBMULTIPLYFACTOR = 10000; // Multiply value to store long instead of float in db.
-    public static int YAHOOMAXSTOCKATATIME = 15; // Max Yahoo stock price to download simultaneously.
-    // Max Google stock price to download simultaneously. If too high (ex: 120), some stocks prices not downloaded.
-    public static int GOOGLEMAXSTOCKATATIME = 100; 
-    
-    // To reduce run. Mostly used to debug. Increment of 100.
-    // Max stock to extract from Bloomberg. Note US stocks are quadrupled before
-    // being trimmed later in program. For ex, when scanning
-    // for new symbols, a US stock is scanned on Nasdaq, Amex, NYSE, 
-    // OTC markets which makes 4 different symbols
-    // As of 02 oct 2016, max possible symbols was around 102000
-    public static int MAXSTOCKTOPROCESS =  200000;  
-    public static String SYMBOLTOCHECKLASTMARKETOPENDATE = "AAPL"; // Use this stock to confirm last day market was open
-    // Number of seconds in given periods for price download
-    public static double SPLITPERCENTAGEDETECT = 30.00;
-    public static double MINPRICEFORSPLITDETECT =  5.00;
-    public static int MAXDAYSBEFOREOBSOLETE = 30; // Max days without price update to make symbol obsolete and stop updating it in local DB.
-    public static int PROCESSOTCMARKET = 1; // 1 process OTC stocks. 0 otherwise.  
-    */  
 
     public static int DAILY  = 24*60*60; // = 86400 
     public static int MIN240 =   240*60; 
@@ -91,11 +65,9 @@ public class StockTechSys {
     // Will contain Entire Stock List to/from SQLDB.
     private final static List<Stock> stockList = new ArrayList<>(); 
 
-    // Will contain Entire BloombergStock List
+    // Will contain Entire StockList from the Internet
     private final static List<Stock> iexstockList = new ArrayList<>(); 
     // Will contain only new stocks to add while updating from Bloomberg an existing DB
-   // private final static List<Stock> trimblstocktoadd = new ArrayList<>(); 
-
 
     public static void main(String[] args) throws IOException, SQLException, MissingResourceException, InterruptedException, MalformedURLException, TimeoutException, Exception {
  

@@ -80,21 +80,26 @@ public abstract class IexDaoImpl implements IexDao {
                 company = objectMapper.readValue(new URL(urlstr), new TypeReference<Company>(){});
                 if (company.getCompanyName() != null) {
                    companyList.add(company);
-                   logger.info("Adding {} of {}: ({})-{}",count,totalsize,company.getSymbol(),company.getCompanyName());
+                   logger.info("getCompanyList - Symbol {} of {}: ({})-{}",count,totalsize,company.getSymbol(),company.getCompanyName());
                 } else
                 {
-                   logger.info("Skipping: ({})-{}",company.getSymbol(),company.getCompanyName());
+                   logger.info("getCompanyList - Skipping: ({})-{}",company.getSymbol(),company.getCompanyName());
                    count--;
                 }    
                 
             } catch (IOException e) {
-                logger.warn("Skipping unknown symbol from API: ({})",symbol.getSymbol());
+                logger.warn("getCompanyList - Skipping unknown symbol from API: ({})",symbol.getSymbol());
                 count--;
             }   
-            if (count > 10) break;
+            // if (count > 10) break;
         }
         
-        logger.info("Total symbols returned {} of {} ",count,totalsize); 
+        if (count > 0) {
+            logger.info("getCompanyList- Total symbols returned {} of {} ",count,totalsize); 
+        } else
+        {
+            logger.error("getCompanyList - No symbol returned !"); 
+        }
         return companyList;    
     }
 

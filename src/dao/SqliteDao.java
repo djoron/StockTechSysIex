@@ -18,7 +18,8 @@ public interface SqliteDao {
     public Connection openSqlDatabase ();
     public boolean closeSqlDatabase (Connection c);
     public Boolean execStatement(String strsql) throws SQLException;
-    public PreparedStatement execPrepStatement(String sql, boolean returnGeneratedKeys, Object... objets ) throws SQLException;
+    public PreparedStatement execPrepStatementRead(String sql, boolean returnGeneratedKeys, Object... objets ) throws SQLException;
+    // public PreparedStatement execPrepStatementWrite(String sql, boolean returnGeneratedKeys, Object... objets ) throws SQLException;
     public boolean createCompanyListTable () throws SQLException;
 
 }

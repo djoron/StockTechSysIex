@@ -123,7 +123,7 @@ public class SqliteDaoImpl implements SqliteDao {
      */
 
     @Override
-    public PreparedStatement execPrepStatement( String sql, boolean returnGeneratedKeys, Object... objets ) throws SQLException {
+    public PreparedStatement execPrepStatementRead( String sql, boolean returnGeneratedKeys, Object... objets ) throws SQLException {
         
         boolean status;
         ResultSet resultSet = null;
@@ -157,46 +157,38 @@ public class SqliteDaoImpl implements SqliteDao {
 //        stmt = null;
 //        stmt = c.createStatement();
 
-        logger.info("createCompanylistDb starting"); 
+        logger.info("createCompanylistTable starting"); 
         String query = // FOR NOW delete table if already exists
                         "DROP TABLE IF EXISTS COMPANY;" +
                         "CREATE TABLE COMPANY " +
-                        //                      "(ID INT PRIMARY KEY    NOT NULL," +
-//                        "(SYMBOL VARCHAR(10) PRIMARY KEY  NOT NULL," +
-                        "(SYMBOL             VARCHAR(10) NOT NULL," +                        
-                        " NAME               TEXT NOT NULL, " +
-                        " EXCHANGE           VARCHAR(10), " +
-                        " EXCHANGENAME       TEXT, " +
-                        " SECTOR             TEXT, " +
+//                        "(ID INT PRIMARY KEY NOT NULL," +
+                        "( SYMBOL             VARCHAR(10) NOT NULL," +                        
+                        " COMPANYNAME        TEXT NOT NULL, " +
+                        " EXCHANGE           TEXT, " +
                         " INDUSTRY           TEXT, " + 
-                        " IPO                VARCHAR(12), " + 
-                        " BOOKVALUE          LONG, " +
-                        " SHORTRATIO         LONG, " +
-                        " DIVIDENDPAYDATE    VARCHAR(12), " +
-                        " EXDIVIDENDPAYDATE  VARCHAR(12), " +
-                        " PRICEBOOK          LONG, " +
-                        " MARKETCAP          LONG, " +
-                        " DIVIDENDPERSHARE   LONG, " +                                
-                        " TAG1               LONG, " +
-                        " TAG2               LONG,  " +
-                        " DAYLASTUPDATE      VARCHAR(24), " + // Last day price info fetched
-                        " OBSOLETE           INTEGER  " +
-//                        ",PRIMARY KEY (SYMBOL, EXCHANGE) ON CONFLICT IGNORE" +
-//                      ",UNIQUE (SYMBOL, EXCHANGE) ON CONFLICT REPLACE" +
-                        ",UNIQUE (SYMBOL, exchange) ON CONFLICT IGNORE " +
+                        " WEBSITE            TEXT, " +
+                        " DESCRIPTION        TEXT, " +
+                        " CEO                TEXT, " +
+                        " ISSUETYPE          TEXT, " +
+                        " SECTOR             TEXT, " +
+//                       " OBSOLETE           INTEGER,  " +
+                        " UNIQUE (SYMBOL, EXCHANGE) ON CONFLICT IGNORE " +
                         ");" +
-                        "CREATE UNIQUE INDEX SYMBOL_IDX ON STOCK(SYMBOL,EXCHANGE);"
+                        "CREATE UNIQUE INDEX SYMBOL_IDX ON COMPANY(SYMBOL,EXCHANGE);"
                 ;
     
         if (execStatement(query) == true) {
-            logger.info("createCompanylistDb created successfully"); 
+            logger.info("createCompanylistTable created successfully"); 
         } else {
-            logger.error("createCompanylistDb did not complete"); 
+            logger.error("createCompanylistTable did not complete"); 
             return false;
         }
         return true;   
     }
 }
+
+
+
 
 /* Find duplicate rows with data from 2 columns
 
