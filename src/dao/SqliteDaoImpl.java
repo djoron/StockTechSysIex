@@ -146,25 +146,25 @@ public class SqliteDaoImpl implements SqliteDao {
     
      /** 
      *
-     * Create Stock database 
+     * Create CompanyList Table to contain company info.
      * @version 1.0 
      * @author : dj
      * @return true if successful.
      * @throws java.sql.SQLException
      */
     @Override
-    public boolean createCompanyListTable () throws SQLException { 
+    public boolean createCompanyTable () throws SQLException { 
 //        stmt = null;
 //        stmt = c.createStatement();
 
-        logger.info("createCompanylistTable starting"); 
+        logger.info("createCompanyTable starting"); 
         String query = // FOR NOW delete table if already exists
                         "DROP TABLE IF EXISTS COMPANY;" +
                         "CREATE TABLE COMPANY " +
 //                        "(ID INT PRIMARY KEY NOT NULL," +
                         "( SYMBOL             VARCHAR(10) NOT NULL," +                        
                         " COMPANYNAME        TEXT NOT NULL, " +
-                        " EXCHANGE           TEXT, " +
+                        " EXCHANGE           TEXT n, " +
                         " INDUSTRY           TEXT, " + 
                         " WEBSITE            TEXT, " +
                         " DESCRIPTION        TEXT, " +
@@ -178,18 +178,81 @@ public class SqliteDaoImpl implements SqliteDao {
                 ;
     
         if (execStatement(query) == true) {
-            logger.info("createCompanylistTable created successfully"); 
+            logger.info("createCompanyTable created successfully"); 
         } else {
-            logger.error("createCompanylistTable did not complete"); 
+            logger.error("createCompanyTable did not complete"); 
             return false;
         }
         return true;   
     }
+
+     /** 
+     *
+     * Create Quote Table to contain stock prices.
+     * @version 1.0 
+     * @author : dj
+     * @return true if successful.
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public boolean createQuoteTable () throws SQLException { 
+//        stmt = null;
+//        stmt = c.createStatement();
+
+        logger.info("createQuoteTable starting"); 
+        String query = // FOR NOW delete table if already exists
+                           "DROP TABLE IF EXISTS QUOTE;" +
+                           "CREATE TABLE QUOTE " +
+                           "(SYMBOL       VARCHAR(10) NOT NULL," +
+                           " COMPANYNAME            TEXT, " +
+                           " PRIMARYEXCHANGE         TEXT, " +
+                           " SECTOR                 TEXT, " +
+                           " CALCULATIONPRICE       TEXT, " +
+                           " OPEN                   TEXT, " +
+                           " OPENTIME               TEXT, " +
+                           " CLOSE                  TEXT, " +
+                           " CLOSETIME              TEXT, " +
+                           " LATESTPRICE            TEXT, " +
+                           " LATESTSOURCE           TEXT, " +
+                           " LATESTTIME             TEXT, " +
+                           " LATESTUPDATE           TEXT, " +
+                           " LATESTVOLUME           TEXT, " +
+                           " IEXREALTIMEPRICE       TEXT, " +
+                           " IEXREALTIMESIZE        TEXT, " +
+                           " iexLastUpdated         TEXT, " +
+                           " delayedPrice           TEXT, " +
+                           " delayedPriceTime       TEXT, " +
+                           " previousClose          TEXT, " +
+                           " change                 TEXT, " +
+                           " changePercent          TEXT, " +
+                           " iexMarketPercent       TEXT, " +
+                           " iexVolume              TEXT, " +
+                           " avgTotalVolume         TEXT, " +
+                           " iexBidPrice            TEXT, " +
+                           " iexBidSize             TEXT, " +
+                           " iexAskPrice            TEXT, " +
+                           " iexAskSize             TEXT, " +
+                           " marketCap              TEXT, " +
+                           " peRatio                TEXT, " +
+                           " week52High             TEXT, " +
+                           " week52Low              TEXT, " +
+                           " ytdChange              TEXT, " +
+                           "UNIQUE (SYMBOL, PRIMARYEXCHANGE, CLOSETIME) ON CONFLICT REPLACE, " +
+                           "FOREIGN KEY(SYMBOL,PRIMARYEXCHANGE) REFERENCES COMPANY(SYMBOL,EXCHANGE)"+
+                           ");" +
+                           "CREATE INDEX DATE_IDX ON QUOTE (SYMBOL, PRIMARYEXCHANGE, CLOSETIME);"
+                ;
+        
+        if (execStatement(query) == true) {
+            logger.info("createQuoteTable created successfully"); 
+        } else {
+            logger.error("createQuoteTable did not complete"); 
+            return false;
+        }
+        return true;   
+    }
+
 }
-
-
-
-
 /* Find duplicate rows with data from 2 columns
 
 SELECT

@@ -11,8 +11,9 @@ package models;
  */
 public class Quote {
     
-    protected String symbol; // Note this is not saved in the DB. Used only for Yahoo Last price download
+    protected String symbol; 
     protected String companyName;
+    protected String primaryExchange;
     protected String sector;
     protected String calculationPrice;
     protected String open;
@@ -22,7 +23,7 @@ public class Quote {
     protected String latestPrice;
     protected String latestSource;
     protected String latestTime;
-    protected String latestUpdate; // Note this is not saved in the DB. Used only for Yahoo Last price download
+    protected String latestUpdate; 
     protected String latestVolume;
     protected String iexRealtimePrice;
     protected String iexRealtimeSize;
@@ -32,6 +33,7 @@ public class Quote {
     protected String previousClose;
     protected String change;
     protected String changePercent;
+    protected String iexMarketPercent;
     protected String iexVolume;
     protected String avgTotalVolume;
     protected String iexBidPrice;
@@ -58,6 +60,14 @@ public class Quote {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    public String getPrimaryExchange() {
+        return primaryExchange;
+    }
+
+    public void setPrimaryExchange(String primaryExchange) {
+        this.primaryExchange = primaryExchange;
     }
 
     public String getSector() {
@@ -212,6 +222,14 @@ public class Quote {
         this.changePercent = changePercent;
     }
 
+    public String getIexMarketPercent() {
+        return iexMarketPercent;
+    }
+
+    public void setIexMarketPercent(String iexMarketPercent) {
+        this.iexMarketPercent = iexMarketPercent;
+    }
+
     public String getIexVolume() {
         return iexVolume;
     }
@@ -299,6 +317,7 @@ public class Quote {
     public void setYtdChange(String ytdChange) {
         this.ytdChange = ytdChange;
     }
+
     
     
 }

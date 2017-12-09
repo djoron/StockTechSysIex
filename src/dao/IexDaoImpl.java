@@ -91,7 +91,7 @@ public abstract class IexDaoImpl implements IexDao {
                 logger.warn("getCompanyList - Skipping unknown symbol from API: ({})",symbol.getSymbol());
                 count--;
             }   
-            // if (count > 10) break;
+            if (count > 10) break;
         }
         
         if (count > 0) {

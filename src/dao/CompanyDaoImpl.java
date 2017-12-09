@@ -36,7 +36,8 @@ public class CompanyDaoImpl implements CompanyDao {
         PreparedStatement prepStmt = null;
         
 // First create new table in database        
-        if (sqliteDao.createCompanyListTable()) {
+        sqliteDao.createQuoteTable();
+        if (sqliteDao.createCompanyTable()) {
            // Table created. Take Internet CompanyListSql and save it in db.
          
            Connection c = sqliteDao.openSqlDatabase();

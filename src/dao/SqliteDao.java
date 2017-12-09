@@ -20,6 +20,7 @@ public interface SqliteDao {
     public Boolean execStatement(String strsql) throws SQLException;
     public PreparedStatement execPrepStatementRead(String sql, boolean returnGeneratedKeys, Object... objets ) throws SQLException;
     // public PreparedStatement execPrepStatementWrite(String sql, boolean returnGeneratedKeys, Object... objets ) throws SQLException;
-    public boolean createCompanyListTable () throws SQLException;
+    public boolean createCompanyTable () throws SQLException;
+    public boolean createQuoteTable () throws SQLException; 
 
 }
