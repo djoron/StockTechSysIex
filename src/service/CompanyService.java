@@ -10,7 +10,6 @@ import dao.CompanyDao;
 import dao.CompanyDaoImpl;
 import dao.IexDao;
 import dao.IexDaoImpl;
-import java.util.ArrayList;
 import java.util.List;
 import models.Company;
 import models.Symbol;

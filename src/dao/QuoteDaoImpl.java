@@ -5,10 +5,14 @@
  */
 package dao;
 
+import java.net.MalformedURLException;
+import java.util.List;
+import models.Quote;
+
 /**
  *
  * @author dominicj
  */
 public class QuoteDaoImpl {
-    
+
 }

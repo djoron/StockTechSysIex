@@ -15,7 +15,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import models.Chart;
 import models.Company;
+import models.Quote;
 import models.Symbol;
 
 /**
@@ -36,13 +38,13 @@ public abstract class IexDaoImpl implements IexDao {
         String urlstr = IEXPREFIX+IEXPREFIXSYMBOLS;
         int size = 0; 
         List <Symbol> symbolList = null;
-        logger.debug("Launching Symbol download - IEX Url {}",urlstr);
+        logger.debug("getSymbolList - Launching Symbol download - IEX Url {}",urlstr);
 
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             symbolList = objectMapper.readValue(new URL(urlstr), new TypeReference<List<Symbol>>(){});
             size = symbolList.size();      
-            logger.info("Read {} symbols",size);
+            logger.info("getSymbolList - Read {} symbols",size);
             
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -91,7 +93,7 @@ public abstract class IexDaoImpl implements IexDao {
                 logger.warn("getCompanyList - Skipping unknown symbol from API: ({})",symbol.getSymbol());
                 count--;
             }   
-            if (count > 10) break;
+            // if (count > 10) break;
         }
         
         if (count > 0) {
@@ -103,4 +105,28 @@ public abstract class IexDaoImpl implements IexDao {
         return companyList;    
     }
 
+    public List<Chart> getChartList(Company company, String period) throws MalformedURLException {
+
+        
+        // Will contain quote List from Internet.
+        // https://api.iextrading.com/1.0/stock/aapl/chart/5y
+        
+        String urlstr = IEXPREFIX+"stock/"+company.getSymbol()+"/chart/"+period;
+     
+        int size = 0; 
+        List <Chart> chartList = null;
+        logger.debug("getChartList - Launching Symbol chart download - IEX Url {}",urlstr);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            chartList = objectMapper.readValue(new URL(urlstr), new TypeReference<List<Chart>>(){});
+            size = chartList.size();      
+            logger.info("getChartList - Read {} dates",size);
+            
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return chartList;
+    }
 }

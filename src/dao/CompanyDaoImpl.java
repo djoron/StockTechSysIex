@@ -88,6 +88,7 @@ public class CompanyDaoImpl implements CompanyDao {
     }
     
     public boolean loadCompanyList(List<Company> companyListSql) throws Exception {
+ 
         return true;
     }
     
