@@ -7,6 +7,7 @@ package dao;
 
 import java.net.MalformedURLException;
 import java.util.List;
+import models.Chart;
 import models.Company;
 import models.Quote;
 import models.Symbol;
@@ -19,5 +20,5 @@ public interface IexDao {
  
     public List<Symbol>   getSymbolList() throws Exception;
     public List<Company>  getCompanyList(List<Symbol> symbolList) throws MalformedURLException;
-
+    public List<Chart>    getChartList(String symbol, String period) throws MalformedURLException;
 }

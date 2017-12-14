@@ -105,13 +105,21 @@ public abstract class IexDaoImpl implements IexDao {
         return companyList;    
     }
 
-    public List<Chart> getChartList(Company company, String period) throws MalformedURLException {
+    /**
+     * Download chart data or price history data from Iex 
+     * from a given company symbol
+     * @param company
+     * @param period
+     * @return
+     * @throws MalformedURLException
+     */
+    @Override
+    public List<Chart> getChartList(String symbol, String period) throws MalformedURLException {
 
-        
         // Will contain quote List from Internet.
         // https://api.iextrading.com/1.0/stock/aapl/chart/5y
         
-        String urlstr = IEXPREFIX+"stock/"+company.getSymbol()+"/chart/"+period;
+        String urlstr = IEXPREFIX+"stock/"+symbol+"/chart/"+period;
      
         int size = 0; 
         List <Chart> chartList = null;

@@ -5,6 +5,7 @@
  */
 package dao;
 
+import java.sql.SQLException;
 import java.util.List;
 import models.Company;
 
@@ -15,6 +16,6 @@ import models.Company;
 public interface CompanyDao {
 
     public boolean saveCompanyList(List<Company> companyListSql) throws Exception;
-    public boolean loadCompanyList(List<Company> companyListSql) throws Exception;
+    public List<Company> loadCompanyListFromDb () throws SQLException;
     
 }

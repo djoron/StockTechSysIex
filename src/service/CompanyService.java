@@ -10,6 +10,7 @@ import dao.CompanyDao;
 import dao.CompanyDaoImpl;
 import dao.IexDao;
 import dao.IexDaoImpl;
+import java.util.ArrayList;
 import java.util.List;
 import models.Company;
 import models.Symbol;
@@ -32,7 +33,13 @@ public class CompanyService {
     public CompanyService() {
     }
         
-    public boolean createStocklist() throws Exception {
+    /**
+     * Creates Company list. Calls internet DAOs to do so and saves it into
+     * SQLDb for persistence.
+     * @return True if download and save ok. False otherwise.
+     * @throws Exception
+     */
+    public boolean createCompanyList() throws Exception {
         boolean status;
         
         // Dao to access internat Data
@@ -58,20 +65,32 @@ public class CompanyService {
             } else {
                 // If returns 0 no data so cannot build stocklist. Must exit
                 logger.info("createStockList - getCompanyList: Could not be built.");
-
+                return false;
             }
         } else
         {
             // If returns 0 no data so cannot build stocklist. Must exit
             logger.info("getSymbolList: Could not download any data...exciting");
+            return false;
         }
 
         
-        return false;
-
-
-
+        return true;
         
     }
+
+    /**
+     * Read CompanyList from local DB. 
+     * @return List of Companies.
+     * @throws Exception
+     */
+    public List<Company> getCompanyListFromDb() throws Exception {
     
+        List<Company> companyList = new ArrayList<Company>();
+
+        CompanyDao companyDao = new CompanyDaoImpl();
+        companyList = companyDao.loadCompanyListFromDb();    
+        return companyList;
+
+    }
 }

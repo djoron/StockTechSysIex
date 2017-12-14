@@ -116,7 +116,7 @@ public class StockTechSys {
 //            databaseService.initializeDatabase();
 
             // Main method to retrieve stocklist from internet and save to DB.
-            companyService.createStocklist();
+            companyService.createCompanyList();
 
             
   //          status = priceHistoryService.downloadFullDailyPriceHistoryandSavetoDb(); 

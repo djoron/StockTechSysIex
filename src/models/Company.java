@@ -73,11 +73,11 @@ public class Company {
         this.description = description;
     }
 
-    public String getceo() {
+    public String getCeo() {
         return ceo;
     }
 
-    public void setCEO(String ceo) {
+    public void setCeo(String ceo) {
         this.ceo = ceo;
     }
 

@@ -5,10 +5,18 @@
  */
 package dao;
 
+import java.util.List;
+import models.Chart;
+import models.Company;
+
 /**
  *
  * @author dominicj
  */
 public interface ChartDao {
     
+    
+    public boolean saveChartListToDb(List<Chart> chartList);
+    
+
 }
