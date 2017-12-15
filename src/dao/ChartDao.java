@@ -16,7 +16,7 @@ import models.Company;
 public interface ChartDao {
     
     
-    public boolean saveChartListToDb(List<Chart> chartList);
+    public boolean saveChartListToDb(List<Chart> chartList, String symbol);
     
 
 }

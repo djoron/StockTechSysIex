@@ -43,13 +43,11 @@ public class PriceHistoryService {
         ChartDao chartDao = new ChartDaoImpl() {};
         
         for (Company company: companyList ) {    
-            
-           
             try {
                 
                 chartList = iexDao.getChartList(company.getSymbol(), YEAR_HISTORY_STRING);
                 if (chartList != null) {
-                    status = chartDao.saveChartListToDb(chartList);
+                    status = chartDao.saveChartListToDb(chartList, company.getSymbol());
                     if (status) {
                        logger.info("createQuotelist - Symbol {} chart saved successfully",company.getSymbol());
                        count++;

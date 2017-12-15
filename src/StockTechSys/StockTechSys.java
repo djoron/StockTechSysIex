@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import service.CompanyService;
+import service.PriceHistoryService;
 import static utilities.DialogWindow.AskUserInputNewDatabase;
 import utilities.FileOperations;
 
@@ -81,6 +82,7 @@ public class StockTechSys {
         
         // Initialize service for Stock list management
         CompanyService companyService = new CompanyService();
+        PriceHistoryService priceHistoryService = new PriceHistoryService();
         
         // Initialize service for Stock price management
  //       PriceHistoryService priceHistoryService = new PriceHistoryService(databaseService);
@@ -117,7 +119,8 @@ public class StockTechSys {
 
             // Main method to retrieve stocklist from internet and save to DB.
             companyService.createCompanyList();
-
+            
+            priceHistoryService.createQuotelist();
             
   //          status = priceHistoryService.downloadFullDailyPriceHistoryandSavetoDb(); 
 

@@ -219,24 +219,24 @@ public class SqliteDaoImpl implements SqliteDao {
                            " LATESTVOLUME           TEXT, " +
                            " IEXREALTIMEPRICE       TEXT, " +
                            " IEXREALTIMESIZE        TEXT, " +
-                           " iexLastUpdated         TEXT, " +
-                           " delayedPrice           TEXT, " +
-                           " delayedPriceTime       TEXT, " +
-                           " previousClose          TEXT, " +
-                           " change                 TEXT, " +
-                           " changePercent          TEXT, " +
-                           " iexMarketPercent       TEXT, " +
-                           " iexVolume              TEXT, " +
-                           " avgTotalVolume         TEXT, " +
-                           " iexBidPrice            TEXT, " +
-                           " iexBidSize             TEXT, " +
-                           " iexAskPrice            TEXT, " +
-                           " iexAskSize             TEXT, " +
-                           " marketCap              TEXT, " +
-                           " peRatio                TEXT, " +
-                           " week52High             TEXT, " +
-                           " week52Low              TEXT, " +
-                           " ytdChange              TEXT, " +
+                           " IEXLASTUPDATED         TEXT, " +
+                           " DELAYEDPRICE           TEXT, " +
+                           " DELAYEDPRICETIME       TEXT, " +
+                           " PREVIOUSCLOSE          TEXT, " +
+                           " CHANGE                 TEXT, " +
+                           " CHANGEPERCENT          TEXT, " +
+                           " IEXMARKETPERCENT       TEXT, " +
+                           " IEXVOLUME              TEXT, " +
+                           " AVGTOTALVOLUME         TEXT, " +
+                           " IEXBIDPRICE            TEXT, " +
+                           " IEXBIDSIZE             TEXT, " +
+                           " IEXASKPRICE            TEXT, " +
+                           " IEXASKSIZE             TEXT, " +
+                           " MARKETCAP              TEXT, " +
+                           " PERATIO                TEXT, " +
+                           " WEEK52HIGH             TEXT, " +
+                           " WEEK52LOW              TEXT, " +
+                           " YTDCHANGE              TEXT, " +
                            "UNIQUE (SYMBOL, PRIMARYEXCHANGE, CLOSETIME) ON CONFLICT REPLACE, " +
                            "FOREIGN KEY(SYMBOL,PRIMARYEXCHANGE) REFERENCES COMPANY(SYMBOL,EXCHANGE)"+
                            ");" +
@@ -247,6 +247,52 @@ public class SqliteDaoImpl implements SqliteDao {
             logger.info("createQuoteTable created successfully"); 
         } else {
             logger.error("createQuoteTable did not complete"); 
+            return false;
+        }
+        return true;   
+    }
+
+         /** 
+     *
+     * Create Quote Table to contain stock prices.
+     * @version 1.0 
+     * @author : dj
+     * @return true if successful.
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public boolean createChartTable () throws SQLException { 
+//        stmt = null;
+//        stmt = c.createStatement();
+
+    
+        logger.info("createChartTable starting"); 
+        String query = // FOR NOW delete table if already exists
+                           "DROP TABLE IF EXISTS CHART;" +
+                           "CREATE TABLE CHART " +
+                           "(SYMBOL       VARCHAR(10) NOT NULL," +
+                           " DATE                   TEXT, " +
+                           " OPEN                   TEXT, " +
+                           " HIGH                   TEXT, " +
+                           " LOW                    TEXT, " +
+                           " CLOSE                  TEXT, " +
+                           " VOLUME                 TEXT, " +
+                           " UNADJUSTEDVOLUME       TEXT, " +
+                           " CHANGE                 TEXT, " +
+                           " CHANGEPERCENT          TEXT, " +
+                           " VWAP                   TEXT, " +
+                           " LABEL                  TEXT, " +
+                           " CHANGEOVERTIME         TEXT, " +
+                           "UNIQUE (SYMBOL, DATE) ON CONFLICT REPLACE, " +
+                           "FOREIGN KEY(SYMBOL) REFERENCES COMPANY(SYMBOL)"+
+                           ");" +
+                           "CREATE INDEX SYMBOL_CHART ON CHART (SYMBOL, DATE);"
+                ;
+        
+        if (execStatement(query) == true) {
+            logger.info("createChartTable created successfully"); 
+        } else {
+            logger.error("createChartTable did not complete"); 
             return false;
         }
         return true;   

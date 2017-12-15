@@ -22,5 +22,6 @@ public interface SqliteDao {
     // public PreparedStatement execPrepStatementWrite(String sql, boolean returnGeneratedKeys, Object... objets ) throws SQLException;
     public boolean createCompanyTable () throws SQLException;
     public boolean createQuoteTable () throws SQLException; 
-
+    public boolean createChartTable () throws SQLException;
+    
 }

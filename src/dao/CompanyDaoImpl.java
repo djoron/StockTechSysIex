@@ -27,10 +27,12 @@ public class CompanyDaoImpl implements CompanyDao {
     
     /**
      * Save Company Downloaded from internet into DB. 
+     * @param companyList
      * @param companyListSql
      * @return
      * @throws Exception
      */
+    @Override
     public boolean saveCompanyList(List<Company> companyList) throws Exception{
     
         SqliteDao sqliteDao = new SqliteDaoImpl();
@@ -43,50 +45,50 @@ public class CompanyDaoImpl implements CompanyDao {
             if (sqliteDao.createCompanyTable()) {
                // Table created. Take Internet CompanyListSql and save it in db.
 
-               Connection c = sqliteDao.openSqlDatabase();
+                Connection c = sqliteDao.openSqlDatabase();
 
-               if (companyList.size() > 0) {
-                stmt = null;
-                stmt = c.createStatement();
-                c.setAutoCommit(false);
+                if (companyList.size() > 0) {
+                    stmt = null;
+                    stmt = c.createStatement();
+                    c.setAutoCommit(false);
 
-                prepStmt = c.prepareStatement("INSERT INTO COMPANY (SYMBOL, COMPANYNAME, "
-                        + "EXCHANGE, INDUSTRY, WEBSITE, DESCRIPTION, CEO, ISSUETYPE, "
-                        + "SECTOR) VALUES (?,?,?,?,?,?,?,?,?);");
-                for (Company s: companyList) {
-                    prepStmt.setString(1,s.getSymbol());
-                    prepStmt.setString(2,s.getCompanyName());
-                    prepStmt.setString(3,s.getExchange());
-                    prepStmt.setString(4,s.getIndustry());
-                    prepStmt.setString(5,s.getWebsite());
-                    prepStmt.setString(6,s.getDescription());
-                    prepStmt.setString(7,s.getCeo());
-                    prepStmt.setString(8,s.getIssueType());
-                    prepStmt.setString(9,s.getSector());
+                    prepStmt = c.prepareStatement("INSERT INTO COMPANY (SYMBOL, COMPANYNAME, "
+                            + "EXCHANGE, INDUSTRY, WEBSITE, DESCRIPTION, CEO, ISSUETYPE, "
+                            + "SECTOR) VALUES (?,?,?,?,?,?,?,?,?);");
+                    for (Company s: companyList) {
+                        prepStmt.setString(1,s.getSymbol());
+                        prepStmt.setString(2,s.getCompanyName());
+                        prepStmt.setString(3,s.getExchange());
+                        prepStmt.setString(4,s.getIndustry());
+                        prepStmt.setString(5,s.getWebsite());
+                        prepStmt.setString(6,s.getDescription());
+                        prepStmt.setString(7,s.getCeo());
+                        prepStmt.setString(8,s.getIssueType());
+                        prepStmt.setString(9,s.getSector());
 
-                    prepStmt.addBatch();
-                }
+                        prepStmt.addBatch();
+                    }
 
-                try  {
-                    prepStmt.executeBatch();
-                    c.commit(); 
-                } catch ( Exception e ) {
-                    logger.error("{} : {}",e.getClass().getName(),e.getMessage() );
+                    try  {
+                        prepStmt.executeBatch();
+                        c.commit(); 
+                    } catch ( Exception e ) {
+                        logger.error("{} : {}",e.getClass().getName(),e.getMessage() );
+                        return false;
+                    } 
+                    prepStmt.close();
+                    c.setAutoCommit(true);          
+                    logger.info("saveCompanyList: CompanyList saved in SqlDB...done");
+                } else {
+                    logger.error("saveCompanyList: CompanyList save FAILED in SqlDB");
+                    sqliteDao.closeSqlDatabase(c);
                     return false;
-                } 
-                prepStmt.close();
-                c.setAutoCommit(true);          
-                logger.info("saveCompanyList: CompanyList saved in SqlDB...done");
+                }
+                    sqliteDao.closeSqlDatabase(c);
+                    return true;          
             } else {
-                logger.error("saveCompanyList: CompanyList save FAILED in SqlDB");
-                sqliteDao.closeSqlDatabase(c);
+                // Table was not created.
                 return false;
-            }
-                sqliteDao.closeSqlDatabase(c);
-                return true;          
-            } else{
-            // Table was not created.
-            return false;
             }
         } else { //
             logger.error("saveCompanyList: Could not create Quote Table");
