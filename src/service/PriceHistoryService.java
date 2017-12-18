@@ -49,17 +49,18 @@ public class PriceHistoryService {
                 if (chartList != null) {
                     status = chartDao.saveChartListToDb(chartList, company.getSymbol());
                     if (status) {
-                       logger.info("createQuotelist - Symbol {} chart saved successfully",company.getSymbol());
+                       // logger.info("createQuotelist - Symbol {} chart saved successfully",company.getSymbol());
                        count++;
                     } else
                     {
                         logger.warn("createQuotelist - Symbol {} chart NOT saved",company.getSymbol());
-                        count--;
+                        // return false; Remove, if one symbol failed, whole thing stopped.
                     }    
                 }    
             } catch (IOException e) {
                 logger.error("createQuotelist - Exception e {}",e);
                 count--;
+                return false;
             }   
         } // for
         return true;

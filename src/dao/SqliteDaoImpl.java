@@ -55,7 +55,7 @@ public class SqliteDaoImpl implements SqliteDao {
           // System.exit(0);
           return null;
         } 
-        logger.info("openSqlDatabase: Successful.");
+        // logger.info("openSqlDatabase: Successful.");
 
         return con;
     } 
@@ -76,7 +76,7 @@ public class SqliteDaoImpl implements SqliteDao {
           logger.debug("closeSqlDatabase: FAILED closing database. Exiting...");
         return false;
         }
-        logger.info("ClosedSqlDatabase: Successful.");
+        // logger.info("ClosedSqlDatabase: Successful.");
     return true;
     } 
 
@@ -129,17 +129,26 @@ public class SqliteDaoImpl implements SqliteDao {
         ResultSet resultSet = null;
         Connection con = openSqlDatabase();
         // c.setAutoCommit(false);
-        
-        PreparedStatement preparedStatement = con.prepareStatement( sql, returnGeneratedKeys ? Statement.RETURN_GENERATED_KEYS : Statement.NO_GENERATED_KEYS );
-        for ( int i = 0; i < objets.length; i++ ) {
-            preparedStatement.setObject( i + 1, objets[i] );
-        }
-        
-        resultSet = preparedStatement.executeQuery();  
-        // c.setAutoCommit(true);
-        status = closeSqlDatabase(con);
 
-        return preparedStatement;
+             
+        try {
+            PreparedStatement preparedStatement = con.prepareStatement( sql, returnGeneratedKeys ? Statement.RETURN_GENERATED_KEYS : Statement.NO_GENERATED_KEYS );
+
+            for ( int i = 0; i < objets.length; i++ ) {
+                preparedStatement.setObject( i + 1, objets[i] );
+            }
+
+            resultSet = preparedStatement.executeQuery();  
+            // c.setAutoCommit(true);
+            status = closeSqlDatabase(con);
+            return preparedStatement;
+
+            } catch ( Exception e ) {
+                logger.error("execPrepStatementRead: returned an error");
+                logger.error("{} : {}",e.getClass().getName(),e.getMessage() );
+                closeSqlDatabase(con);
+                return null;
+            }
     }
 
     
@@ -159,7 +168,6 @@ public class SqliteDaoImpl implements SqliteDao {
 
         logger.info("createCompanyTable starting"); 
         String query = // FOR NOW delete table if already exists
-                        "DROP TABLE IF EXISTS COMPANY;" +
                         "CREATE TABLE COMPANY " +
 //                        "(ID INT PRIMARY KEY NOT NULL," +
                         "( SYMBOL             VARCHAR(10) NOT NULL," +                        
@@ -176,15 +184,22 @@ public class SqliteDaoImpl implements SqliteDao {
                         ");" +
                         "CREATE UNIQUE INDEX SYMBOL_IDX ON COMPANY(SYMBOL,EXCHANGE);"
                 ;
-    
-        if (execStatement(query) == true) {
-            logger.info("createCompanyTable created successfully"); 
-        } else {
-            logger.error("createCompanyTable did not complete"); 
+        try {
+            
+            if (execStatement(query) == true) {
+                // logger.info("createCompanyTable created successfully"); 
+            } else {
+                logger.error("createCompanyTable did not complete.");
+                return false;
+            }
+            return true;   
+        } catch ( Exception e ) {
+            logger.error("createCompanyTable did not complete.");
+            logger.error("{} : {}",e.getClass().getName(),e.getMessage() );
             return false;
+            }        
         }
-        return true;   
-    }
+        
 
      /** 
      *
@@ -201,7 +216,6 @@ public class SqliteDaoImpl implements SqliteDao {
 
         logger.info("createQuoteTable starting"); 
         String query = // FOR NOW delete table if already exists
-                           "DROP TABLE IF EXISTS QUOTE;" +
                            "CREATE TABLE QUOTE " +
                            "(SYMBOL       VARCHAR(10) NOT NULL," +
                            " COMPANYNAME            TEXT, " +
@@ -243,13 +257,19 @@ public class SqliteDaoImpl implements SqliteDao {
                            "CREATE INDEX DATE_IDX ON QUOTE (SYMBOL, PRIMARYEXCHANGE, CLOSETIME);"
                 ;
         
-        if (execStatement(query) == true) {
-            logger.info("createQuoteTable created successfully"); 
-        } else {
-            logger.error("createQuoteTable did not complete"); 
+        try {
+            if (execStatement(query) == true) {
+                // logger.info("createCompanyTable created successfully"); 
+                return true;   
+            } else {
+                logger.error("createQuoteTable did not complete.");
+                return false;
+            }
+        } catch ( Exception e ) {
+            logger.error("createQuoteTable did not complete.");
+            logger.error("{} : {}",e.getClass().getName(),e.getMessage() );
             return false;
-        }
-        return true;   
+        }        
     }
 
          /** 
@@ -266,9 +286,8 @@ public class SqliteDaoImpl implements SqliteDao {
 //        stmt = c.createStatement();
 
     
-        logger.info("createChartTable starting"); 
+        // logger.info("createChartTable starting"); 
         String query = // FOR NOW delete table if already exists
-                           "DROP TABLE IF EXISTS CHART;" +
                            "CREATE TABLE CHART " +
                            "(SYMBOL       VARCHAR(10) NOT NULL," +
                            " DATE                   TEXT, " +
@@ -289,13 +308,19 @@ public class SqliteDaoImpl implements SqliteDao {
                            "CREATE INDEX SYMBOL_CHART ON CHART (SYMBOL, DATE);"
                 ;
         
-        if (execStatement(query) == true) {
-            logger.info("createChartTable created successfully"); 
-        } else {
-            logger.error("createChartTable did not complete"); 
+        try {
+            if (execStatement(query) == true) {
+                // logger.info("createCompanyTable created successfully"); 
+                return true;   
+            } else {
+                logger.error("createChartTable did not complete.");
+                return false;
+            }
+        } catch ( Exception e ) {
+            logger.error("createChartTable did not complete.");
+            logger.error("{} : {}",e.getClass().getName(),e.getMessage() );
             return false;
-        }
-        return true;   
+        }        
     }
 
 }

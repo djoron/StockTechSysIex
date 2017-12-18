@@ -8,11 +8,8 @@ package dao;
 import static StockTechSys.StockTechSys.logger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import models.Chart;
 
 /**
@@ -27,77 +24,58 @@ public class ChartDaoImpl implements ChartDao {
         SqliteDao sqliteDao = new SqliteDaoImpl();
         Statement stmt = null;
         PreparedStatement prepStmt = null;
+        int count = 0;
         
-        try {
-            // First create new table in database
-            if (sqliteDao.createChartTable()) {
-                // Table created. Take Internet CompanyListSql and save it in db.
-                
-                Connection c = sqliteDao.openSqlDatabase();
-                
-                if (chartList.size() > 0) {
-                    stmt = null;
-                    stmt = c.createStatement();
-                    c.setAutoCommit(false);
-                    
-                    prepStmt = c.prepareStatement( "INSERT INTO CHART (" +
-                            " SYMBOL       VARCHAR(10) NOT NULL," +
-                            " DATE                   TEXT, " +
-                            " OPEN                   TEXT, " +
-                            " HIGH                   TEXT, " +
-                            " LOW                    TEXT, " +
-                            " CLOSE                  TEXT, " +
-                            " VOLUME                 TEXT, " +
-                            " UNADJUSTEDVOLUME       TEXT, " +
-                            " CHANGE                 TEXT, " +
-                            " CHANGEPERCENT          TEXT, " +
-                            " VWAP                   TEXT, " +
-                            " LABEL                  TEXT, " +
-                            " CHANGEOVERTIME         TEXT )" +
-                            " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);");
-                    
-                    for (Chart ch: chartList) {
-                        prepStmt.setString(1,symbol);
-                        prepStmt.setString(2,ch.getDate());
-                        prepStmt.setString(3,ch.getOpen());
-                        prepStmt.setString(4,ch.getHigh());
-                        prepStmt.setString(5,ch.getLow());
-                        prepStmt.setString(6,ch.getClose());
-                        prepStmt.setString(7,ch.getVolume());
-                        prepStmt.setString(8,ch.getUnadjustedVolume());
-                        prepStmt.setString(9,ch.getChange());
-                        prepStmt.setString(10,ch.getChangePercent());
-                        prepStmt.setString(11,ch.getVwap());
-                        prepStmt.setString(12,ch.getLabel());
-                        prepStmt.setString(13,ch.getChangeOverTime());
-                                                
-                        prepStmt.addBatch();
-                    }
-                    
-                    try  {
-                        prepStmt.executeBatch();
-                        c.commit();
-                    } catch ( Exception e ) {
-                        logger.error("{} : {}",e.getClass().getName(),e.getMessage() );
-                        return false;
-                    }
-                    prepStmt.close();
-                    c.setAutoCommit(true);
-                    logger.info("saveChartListToDb: ChartList saved in SqlDB for symbol {}...done",symbol);
-                } else {
-                    logger.error("saveChartListToDb: ChartList save FAILED in SqlDB for symbol {}",symbol);
-                    sqliteDao.closeSqlDatabase(c);
-                    return false;
+        Connection c = sqliteDao.openSqlDatabase();
+
+        if (chartList.size() > 0) {
+            stmt = null;
+    
+            try {
+                stmt = c.createStatement();
+                c.setAutoCommit(false);
+                prepStmt = c.prepareStatement( "INSERT INTO CHART (" +
+                        " SYMBOL, DATE, OPEN, HIGH, LOW, CLOSE, " +
+                        " VOLUME, UNADJUSTEDVOLUME, CHANGE, CHANGEPERCENT, " +
+                        " VWAP, LABEL, CHANGEOVERTIME)" +
+                        " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);");
+
+                for (Chart ch: chartList) {
+                    prepStmt.setString(1,symbol);
+                    prepStmt.setString(2,ch.getDate());
+                    prepStmt.setString(3,ch.getOpen());
+                    prepStmt.setString(4,ch.getHigh());
+                    prepStmt.setString(5,ch.getLow());
+                    prepStmt.setString(6,ch.getClose());
+                    prepStmt.setString(7,ch.getVolume());
+                    prepStmt.setString(8,ch.getUnadjustedVolume());
+                    prepStmt.setString(9,ch.getChange());
+                    prepStmt.setString(10,ch.getChangePercent());
+                    prepStmt.setString(11,ch.getVwap());
+                    prepStmt.setString(12,ch.getLabel());
+                    prepStmt.setString(13,ch.getChangeOverTime());
+
+                    prepStmt.addBatch();
+                    count++;
                 }
-                sqliteDao.closeSqlDatabase(c);
-                return true;
-            } else{
-                // Table was not created.
+                
+                prepStmt.executeBatch();
+                c.commit();
+            
+                prepStmt.close();
+                c.setAutoCommit(true);
+                logger.info("saveChartListToDb: {} days saved in SqlDB for symbol {}...",count,symbol);
+            } catch ( Exception e ) {
+                logger.error("saveChartListToDb: Prep Statement failed");
+                logger.error("{} : {}",e.getClass().getName(),e.getMessage() );
                 return false;
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(ChartDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } else {
+            logger.error("saveChartListToDb: ChartList save FAILED in SqlDB at symbol {}.",symbol);
+            sqliteDao.closeSqlDatabase(c);
+            return false;
         }
-        return true;
+        sqliteDao.closeSqlDatabase(c);
+        return true;  
     }    
 }

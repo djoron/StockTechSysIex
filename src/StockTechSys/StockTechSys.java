@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import service.CompanyService;
 import service.PriceHistoryService;
+import service.SqlDatabaseService;
 import static utilities.DialogWindow.AskUserInputNewDatabase;
 import utilities.FileOperations;
 
@@ -83,6 +84,7 @@ public class StockTechSys {
         // Initialize service for Stock list management
         CompanyService companyService = new CompanyService();
         PriceHistoryService priceHistoryService = new PriceHistoryService();
+        SqlDatabaseService sqlDatabaseService = new SqlDatabaseService();
         
         // Initialize service for Stock price management
  //       PriceHistoryService priceHistoryService = new PriceHistoryService(databaseService);
@@ -106,6 +108,7 @@ public class StockTechSys {
         // If DB does not exist, create new one else ask user if he wants to 
         // delete current data
         if (fileOperation.checkFileExist(DATABASEFILENAME)) {
+               logger.info("Waiting for user confirmation.");
                createNewDb = AskUserInputNewDatabase();
                if (createNewDb) { fileOperation.deleteFile(DATABASEFILENAME); }
         } else createNewDb = true;
@@ -115,11 +118,10 @@ public class StockTechSys {
         
         if (createNewDb == true) {
             logger.debug("Creating new Database. Hold on.");
-//            databaseService.initializeDatabase();
-
+            sqlDatabaseService.createSqlDb();
             // Main method to retrieve stocklist from internet and save to DB.
             companyService.createCompanyList();
-            
+            // Now get priceHistory and save into DB.            
             priceHistoryService.createQuotelist();
             
   //          status = priceHistoryService.downloadFullDailyPriceHistoryandSavetoDb(); 

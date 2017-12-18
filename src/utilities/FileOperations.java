@@ -5,6 +5,7 @@
  */
 package utilities;
 
+import static StockTechSys.StockTechSys.logger;
 import java.io.File;
 
 /**
@@ -38,6 +39,9 @@ public class FileOperations {
         boolean bool;
         File f = new File(filename);
         bool = f.delete();
+        if (!bool) {
+            logger.error("deleteFile - Could not delete {}.",filename);
+        }
         return bool;                
     }
 
