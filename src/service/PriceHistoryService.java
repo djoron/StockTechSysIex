@@ -45,7 +45,7 @@ public class PriceHistoryService {
         for (Company company: companyList ) {    
             try {
                 
-                chartList = iexDao.getChartList(company.getSymbol(), YEAR_HISTORY_STRING);
+                chartList = iexDao.getDailyChartList(company.getSymbol(), YEAR_HISTORY_STRING);
                 if (chartList != null) {
                     status = chartDao.saveChartListToDb(chartList, company.getSymbol());
                     if (status) {

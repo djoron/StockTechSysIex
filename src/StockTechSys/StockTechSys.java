@@ -50,6 +50,15 @@ public class StockTechSys {
  // GLOBAL CONSTANT   
     // See parameters.java for initialization of program parameters.
 
+    public static String   FIVEYEARS = "5y";
+    public static String    TWOYEARS = "2y";
+    public static String     ONEYEAR = "1y";
+    public static String         YTD = "ytd";
+    public static String   SIXMONTHS = "6m";
+    public static String THREEMONTHS = "3m";
+    public static String    ONEMONTH = "1m";
+
+    
     public static int DAILY  = 24*60*60; // = 86400 
     public static int MIN240 =   240*60; 
     public static int MIN120 =   120*60; 
@@ -127,7 +136,9 @@ public class StockTechSys {
   //          status = priceHistoryService.downloadFullDailyPriceHistoryandSavetoDb(); 
 
         } else {    
-/*
+            companyService.updateCompanyList();
+            
+/* 
             // xxx DO A BACKUP OF DB HERE ??
             status = databaseService.initializeDatabase();
             

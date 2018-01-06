@@ -8,6 +8,8 @@ package dao;
 import static StockTechSys.Parameters.IEXPREFIX;
 import static StockTechSys.Parameters.IEXPREFIXSYMBOLS;
 import static StockTechSys.Parameters.MAXSTOCKTOPROCESS;
+import static StockTechSys.Parameters.SYMBOLTOCHECKLASTMARKETOPENDATE;
+import static StockTechSys.StockTechSys.ONEMONTH;
 import static StockTechSys.StockTechSys.logger;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -115,7 +117,7 @@ public abstract class IexDaoImpl implements IexDao {
      * @throws MalformedURLException
      */
     @Override
-    public List<Chart> getChartList(String symbol, String period) throws MalformedURLException {
+    public List<Chart> getDailyChartList(String symbol, String period) throws MalformedURLException {
 
         // Will contain quote List from Internet.
         // https://api.iextrading.com/1.0/stock/aapl/chart/5y
@@ -124,13 +126,13 @@ public abstract class IexDaoImpl implements IexDao {
      
         int size = 0; 
         List <Chart> chartList = null;
-        // logger.debug("getChartList - Launching Symbol chart download - IEX Url {}",urlstr);
+        // logger.debug("getDailyChartList - Launching Symbol chart download - IEX Url {}",urlstr);
 
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             chartList = objectMapper.readValue(new URL(urlstr), new TypeReference<List<Chart>>(){});
             size = chartList.size();      
-            // logger.info("getChartList - Read {} dates",size);
+            // logger.info("getDailyChartList - Read {} dates",size);
             
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -138,4 +140,66 @@ public abstract class IexDaoImpl implements IexDao {
         }
         return chartList;
     }
+
+    /**
+     * Download chart data or price history data from Iex 
+     * from a given company symbol
+     * @param company
+     * @param period
+     * @return
+     * @throws MalformedURLException
+     */
+    @Override
+    public List<Chart> updateDailyChartList(String symbol, String period) throws MalformedURLException {
+
+        // Will contain quote List from Internet.
+        // https://api.iextrading.com/1.0/stock/aapl/chart/5y
+        
+        String urlstr = IEXPREFIX+"stock/"+symbol+"/chart/"+period;
+     
+        int size = 0; 
+        List <Chart> chartList = null;
+        // logger.debug("getDailyChartList - Launching Symbol chart download - IEX Url {}",urlstr);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            chartList = objectMapper.readValue(new URL(urlstr), new TypeReference<List<Chart>>(){});
+            size = chartList.size();      
+            // logger.info("getDailyChartList - Read {} dates",size);
+            
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return chartList;
+    }
+
+        /**
+     * This method will return in an String the last date the market was opened or
+     * the last date a symbol was traded.
+     * It basically requests the price of AAPL from Google and 
+     * returns the last date a price is available.
+     * Does not check if last time was 16:00 since some days end at noon. 
+     * @author atlantis
+     * @param symbol : Symbol to check last available trading date.
+     * @return String with last date
+     * @throws java.lang.Exception
+    */
+    @Override
+    public String getLastOpenMarketDate () 
+                          throws Exception {
+
+        String lastOpenDate = "";        
+        List<Chart> chartList = new ArrayList<Chart>();
+        
+        chartList = updateDailyChartList (SYMBOLTOCHECKLASTMARKETOPENDATE,ONEMONTH);
+
+        if (chartList.size() > 1) {
+            lastOpenDate = chartList.get(chartList.size() - 1).getDate();
+        }
+        else lastOpenDate = "";
+        
+        return lastOpenDate;
+    }
+
 }

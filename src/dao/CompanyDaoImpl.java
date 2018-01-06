@@ -135,4 +135,62 @@ public class CompanyDaoImpl implements CompanyDao {
         return companyList;
     }
     
+    /**
+     * Update Company Downloaded from internet into DB. 
+     * @param companyList
+     * @param companyListSql
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public boolean updateCompanyList(List<Company> companyList) throws Exception{
+    
+        SqliteDao sqliteDao = new SqliteDaoImpl();
+        Statement stmt = null;
+        PreparedStatement prepStmt = null;
+        
+
+        Connection c = sqliteDao.openSqlDatabase();
+
+        if (companyList.size() > 0) {
+            stmt = null;
+            stmt = c.createStatement();
+            c.setAutoCommit(false);
+
+            prepStmt = c.prepareStatement("INSERT OR REPLACE INTO COMPANY (SYMBOL, COMPANYNAME, "
+                    + "EXCHANGE, INDUSTRY, WEBSITE, DESCRIPTION, CEO, ISSUETYPE, "
+                    + "SECTOR) VALUES (?,?,?,?,?,?,?,?,?);");
+            for (Company s: companyList) {
+                prepStmt.setString(1,s.getSymbol());
+                prepStmt.setString(2,s.getCompanyName());
+                prepStmt.setString(3,s.getExchange());
+                prepStmt.setString(4,s.getIndustry());
+                prepStmt.setString(5,s.getWebsite());
+                prepStmt.setString(6,s.getDescription());
+                prepStmt.setString(7,s.getCeo());
+                prepStmt.setString(8,s.getIssueType());
+                prepStmt.setString(9,s.getSector());
+
+                prepStmt.addBatch();
+            }
+
+            try  {
+                prepStmt.executeBatch();
+                c.commit(); 
+            } catch ( Exception e ) {
+                logger.error("{} : {}",e.getClass().getName(),e.getMessage() );
+                return false;
+            } 
+            prepStmt.close();
+            c.setAutoCommit(true);          
+            logger.info("updateCompanyList: CompanyList saved in SqlDB...done");
+        } else {
+            logger.error("updateCompanyList: CompanyList save FAILED in SqlDB");
+            sqliteDao.closeSqlDatabase(c);
+            return false;
+        }
+        sqliteDao.closeSqlDatabase(c);
+        return true;          
+    }
+
 }

@@ -18,7 +18,10 @@ import models.Symbol;
  */
 public interface IexDao {
  
+    
     public List<Symbol>   getSymbolList() throws Exception;
     public List<Company>  getCompanyList(List<Symbol> symbolList) throws MalformedURLException;
-    public List<Chart>    getChartList(String symbol, String period) throws MalformedURLException;
+    public List<Chart>    getDailyChartList(String symbol, String period) throws MalformedURLException;
+    public List<Chart>    updateDailyChartList(String symbol, String period) throws MalformedURLException;
+    public String         getLastOpenMarketDate () throws Exception;
 }

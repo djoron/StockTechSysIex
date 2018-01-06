@@ -172,7 +172,7 @@ public class SqliteDaoImpl implements SqliteDao {
 //                        "(ID INT PRIMARY KEY NOT NULL," +
                         "( SYMBOL             VARCHAR(10) NOT NULL," +                        
                         " COMPANYNAME        TEXT NOT NULL, " +
-                        " EXCHANGE           TEXT n, " +
+                        " EXCHANGE           TEXT, " +
                         " INDUSTRY           TEXT, " + 
                         " WEBSITE            TEXT, " +
                         " DESCRIPTION        TEXT, " +
