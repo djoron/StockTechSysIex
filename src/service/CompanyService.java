@@ -5,6 +5,7 @@
  */
 package service;
 
+import StockTechSys.StockTechSys.TypeListDownload;
 import static StockTechSys.StockTechSys.logger;
 import dao.CompanyDao;
 import dao.CompanyDaoImpl;
@@ -36,23 +37,23 @@ public class CompanyService {
     /**
      * Creates Company list. Calls internet DAOs to do so and saves it into
      * SQLDb for persistence.
+     * 
+     * @param val Type of List to be saved in DB. Permanent or temporary
+     * @param symbolList List as downloaded on IEX. use Symbol List to build company List
      * @return True if download and save ok. False otherwise.
      * @throws Exception
      */
-    public boolean createCompanyList() throws Exception {
+    public boolean createCompanyList(List<Symbol>symbolList) throws Exception {
         boolean status;
         
         // Dao to access internat Data
         IexDao iexDao = new IexDaoImpl() {};
         
-        // Will contain symbol only List from Internet.
-        List<Symbol> symbolList = iexDao.getSymbolList();
+        List<Company> companyList = iexDao.getCompanyList(symbolList);
         
         // Use internet to download full Symbol List to populate new DB 
         if (!symbolList.isEmpty()) 
         {
-            // We have data. Build company List, download info from internet.
-            List<Company> companyList = iexDao.getCompanyList(symbolList);
             
             if (!companyList.isEmpty()) 
             {
@@ -82,17 +83,15 @@ public class CompanyService {
         /**
      * Update Company list. Calls internet DAOs to do so and saves it into
      * SQLDb for persistence.
+     * @param symbolList Symbol list as downloaded from IEX
      * @return True if download and save ok. False otherwise.
      * @throws Exception
      */
-    public boolean updateCompanyList() throws Exception {
+    public boolean updateCompanyList(List<Symbol>symbolList) throws Exception {
         boolean status;
         
         // Dao to access internat Data
         IexDao iexDao = new IexDaoImpl() {};
-        
-        // Will contain symbol only List from Internet.
-        List<Symbol> symbolList = iexDao.getSymbolList();
         
         // Use internet to download full Symbol List to populate new DB 
         if (!symbolList.isEmpty()) 

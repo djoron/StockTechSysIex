@@ -162,11 +162,11 @@ public class SqliteDaoImpl implements SqliteDao {
      * @throws java.sql.SQLException
      */
     @Override
-    public boolean createCompanyTable () throws SQLException { 
+    public boolean createCompanyTables () throws SQLException { 
 //        stmt = null;
 //        stmt = c.createStatement();
 
-        logger.info("createCompanyTable starting"); 
+        logger.info("createCompanyTable Company starting"); 
         String query = // FOR NOW delete table if already exists
                         "CREATE TABLE COMPANY " +
 //                        "(ID INT PRIMARY KEY NOT NULL," +
@@ -182,24 +182,95 @@ public class SqliteDaoImpl implements SqliteDao {
 //                       " OBSOLETE           INTEGER,  " +
                         " UNIQUE (SYMBOL, EXCHANGE) ON CONFLICT IGNORE " +
                         ");" +
-                        "CREATE UNIQUE INDEX SYMBOL_IDX ON COMPANY(SYMBOL,EXCHANGE);"
+                        "CREATE UNIQUE INDEX SYMBOL_IDX_COMPANYTABLE ON COMPANY(SYMBOL,EXCHANGE);"
                 ;
         try {
             
             if (execStatement(query) == true) {
-                // logger.info("createCompanyTable created successfully"); 
+                // logger.info("createCompanyTables created successfully"); 
             } else {
-                logger.error("createCompanyTable did not complete.");
-                return false;
+                logger.error("createCompanyTable Company did not complete.");
             }
-            return true;   
         } catch ( Exception e ) {
-            logger.error("createCompanyTable did not complete.");
+            logger.error("createCompanyTable Company did not complete.");
             logger.error("{} : {}",e.getClass().getName(),e.getMessage() );
             return false;
-            }        
-        }
+
+        }        
+        return true;
+    }
         
+    
+     /** 
+     *
+     * Create SymbolList Table to contain Symbol info.
+     * @version 1.0 
+     * @author : dj
+     * @return true if successful.
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public boolean createSymbolTables () throws SQLException { 
+//        stmt = null;
+//        stmt = c.createStatement();
+
+        logger.info("createSymbolTable Symbol starting"); 
+        String query = // FOR NOW delete table if already exists
+                        "CREATE TABLE SYMBOL " +
+//                        "(ID INT PRIMARY KEY NOT NULL," +
+                        "( SYMBOL             VARCHAR(10) NOT NULL," +                        
+                        " NAME               TEXT NOT NULL, " +
+                        " DATE               TEXT, " +
+                        " ISENABLED          TEXT, " + 
+                        " TYPE               TEXT, " +
+                        " IEXID              TEXT, " +
+                        " UNIQUE (SYMBOL) ON CONFLICT REPLACE " +
+                        ");" +
+                        "CREATE UNIQUE INDEX SYMBOL_IDX_SYMBOLTABLE ON SYMBOL(SYMBOL);"
+                ;
+        try {
+            
+            if (execStatement(query) == true) {
+                // logger.info("createCompanyTables created successfully"); 
+            } else {
+                logger.error("createSymbolTable Symbol did not complete.");
+            }
+        } catch ( Exception e ) {
+            logger.error("createSymbolTable Symbol did not complete.");
+            logger.error("{} : {}",e.getClass().getName(),e.getMessage() );
+        }        
+
+        // Now create temporary symbol table
+        
+        logger.info("createSymbolTable Temporary starting"); 
+        query = // FOR NOW delete table if already exists
+                        "CREATE TABLE SYMBOLTEMPORARY " +
+//                        "(ID INT PRIMARY KEY NOT NULL," +
+                       "( SYMBOL             VARCHAR(10) NOT NULL," +                        
+                        " NAME               TEXT NOT NULL, " +
+                        " DATE               TEXT, " +
+                        " ISENABLED          TEXT, " + 
+                        " TYPE               TEXT, " +
+                        " IEXID              TEXT, " +
+                        " UNIQUE (SYMBOL) ON CONFLICT REPLACE " +
+                        ");" +
+                        "CREATE UNIQUE INDEX SYMBOL_IDX_SYMBOLTEMPTABLE ON SYMBOLTEMPORARY(SYMBOL);"
+                ;
+        try {
+            
+            if (execStatement(query) == true) {
+                // logger.info("createCompanyTables created successfully"); 
+            } else {
+                logger.error("createSymbolTable Temporary did not complete.");
+                return false;
+            }
+            return true;
+        } catch ( Exception e ) {
+            logger.error("createSymbolTable Temporary did not complete.");
+            logger.error("{} : {}",e.getClass().getName(),e.getMessage() );
+            return false;
+        }        
+    }
 
      /** 
      *
@@ -259,7 +330,7 @@ public class SqliteDaoImpl implements SqliteDao {
         
         try {
             if (execStatement(query) == true) {
-                // logger.info("createCompanyTable created successfully"); 
+                // logger.info("createCompanyTables created successfully"); 
                 return true;   
             } else {
                 logger.error("createQuoteTable did not complete.");
@@ -310,7 +381,7 @@ public class SqliteDaoImpl implements SqliteDao {
         
         try {
             if (execStatement(query) == true) {
-                // logger.info("createCompanyTable created successfully"); 
+                // logger.info("createCompanyTables created successfully"); 
                 return true;   
             } else {
                 logger.error("createChartTable did not complete.");

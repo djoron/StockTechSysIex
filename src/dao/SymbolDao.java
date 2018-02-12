@@ -8,17 +8,16 @@ package dao;
 import StockTechSys.StockTechSys.TypeListDownload;
 import java.sql.SQLException;
 import java.util.List;
-import models.Company;
+import models.Symbol;
 
 
 /**
  *
  * @author dominicj
  */
-public interface CompanyDao {
+public interface SymbolDao {
 
-    public boolean saveCompanyList(List<Company> companyListSql) throws Exception;
-    public List<Company> loadCompanyListFromDb () throws SQLException;
-    public boolean updateCompanyList(List<Company> companyList) throws Exception;
-    
+    public boolean saveSymbolList(List<Symbol> symbolList, TypeListDownload val) throws Exception;
+    public List<Symbol> loadSymbolListFromDb () throws SQLException;
+        
 }

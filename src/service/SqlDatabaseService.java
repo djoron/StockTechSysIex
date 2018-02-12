@@ -20,9 +20,11 @@ public class SqlDatabaseService {
         SqliteDao sqliteDao = new SqliteDaoImpl();
         boolean status = false;
         
-        status = sqliteDao.createCompanyTable() && 
+        status = sqliteDao.createSymbolTables() &&
+                 sqliteDao.createCompanyTables() && 
                  sqliteDao.createChartTable() &&
                  sqliteDao.createQuoteTable();
+        
         
         if (status) {
             logger.info("createSqlDb: Completed successfully");

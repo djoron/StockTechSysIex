@@ -5,6 +5,7 @@
  */
 package dao;
 
+import StockTechSys.StockTechSys.TypeListDownload;
 import static StockTechSys.StockTechSys.logger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -39,7 +40,6 @@ public class CompanyDaoImpl implements CompanyDao {
         Statement stmt = null;
         PreparedStatement prepStmt = null;
         
-
         Connection c = sqliteDao.openSqlDatabase();
 
         if (companyList.size() > 0) {
@@ -48,8 +48,9 @@ public class CompanyDaoImpl implements CompanyDao {
             c.setAutoCommit(false);
 
             prepStmt = c.prepareStatement("INSERT INTO COMPANY (SYMBOL, COMPANYNAME, "
-                    + "EXCHANGE, INDUSTRY, WEBSITE, DESCRIPTION, CEO, ISSUETYPE, "
-                    + "SECTOR) VALUES (?,?,?,?,?,?,?,?,?);");
+                + "EXCHANGE, INDUSTRY, WEBSITE, DESCRIPTION, CEO, ISSUETYPE, "
+                + "SECTOR) VALUES (?,?,?,?,?,?,?,?,?);");
+
             for (Company s: companyList) {
                 prepStmt.setString(1,s.getSymbol());
                 prepStmt.setString(2,s.getCompanyName());
@@ -145,6 +146,19 @@ public class CompanyDaoImpl implements CompanyDao {
     @Override
     public boolean updateCompanyList(List<Company> companyList) throws Exception{
     
+/*        
+        https://stackoverflow.com/questions/38226340/find-the-difference-between-two-collections-in-java-8
+        
+        List<Book> books1 = ...;
+List<Book> books2 = ...;
+Set<Integer> ids = books2.stream()
+        .map(Book::getId)
+        .collect(Collectors.toSet());
+List<Book> parentBooks = books1.stream()
+        .filter(book -> !ids.contains(book.getId()))
+        .collect(Collectors.toList());
+
+*/
         SqliteDao sqliteDao = new SqliteDaoImpl();
         Statement stmt = null;
         PreparedStatement prepStmt = null;

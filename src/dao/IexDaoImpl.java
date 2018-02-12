@@ -16,6 +16,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import models.Chart;
@@ -97,7 +99,7 @@ public abstract class IexDaoImpl implements IexDao {
                 count--;
             }   
             if (count > MAXSTOCKTOPROCESS) break;
-        }
+        } // for
         
         if (count > 0) {
             logger.info("getCompanyList- Total symbols returned {} of {} ",count,totalsize); 
@@ -190,7 +192,7 @@ public abstract class IexDaoImpl implements IexDao {
                           throws Exception {
 
         String lastOpenDate = "";        
-        List<Chart> chartList = new ArrayList<Chart>();
+        List<Chart> chartList = new ArrayList<>();
         
         chartList = updateDailyChartList (SYMBOLTOCHECKLASTMARKETOPENDATE,ONEMONTH);
 
@@ -201,5 +203,47 @@ public abstract class IexDaoImpl implements IexDao {
         
         return lastOpenDate;
     }
+}
+
+    /* xxxx
+    public static int findLatestSymbolTimestampfromDb(String symbol, String exchange) throws SQLException {
+        String sym = null;
+        String dat = null;
+        String timestamp = null;
+        
+        c.setAutoCommit(false);
+        prepStmt = c.prepareStatement(
+                "SELECT * FROM CHART " +
+                "WHERE SYMBOL = ?"+
+                "AND DATE = (SELECT MAX(DATE) " +
+                "FROM CHART WHERE SYMBOL = ?); "
+        );                       
+ 
+        prepStmt.setString(1,symbol);
+        prepStmt.setString(2,exchange);
+        prepStmt.setString(3,symbol);
+//        prepStmt.addBatch();
+                
+        ResultSet rs = prepStmt.executeQuery();
+        try {
+            while ( rs.next() ) {
+                sym = rs.getString("symbol");
+                dat  = rs.getString("date");
+                timestamp = rs.getString("timestamp");
+//                System.out.println( "symbol = " + sym );
+//                System.out.println( "Date= " + dat );
+//                System.out.println();
+            }
+           prepStmt.close();
+        c.setAutoCommit(true);          
+
+        } catch ( Exception e ) {
+          logger.error("{} : {}",e.getClass().getName(),e.getMessage() );
+          // System.exit(0);
+          return 0;
+        }
+        return Integer.parseInt(timestamp);
+    }
 
 }
+*/

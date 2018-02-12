@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.MissingResourceException;
 import java.util.concurrent.TimeoutException;
+import models.Symbol;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import service.CompanyService;
 import service.PriceHistoryService;
 import service.SqlDatabaseService;
+import service.SymbolService;
 import static utilities.DialogWindow.AskUserInputNewDatabase;
 import utilities.FileOperations;
 
@@ -58,7 +60,6 @@ public class StockTechSys {
     public static String THREEMONTHS = "3m";
     public static String    ONEMONTH = "1m";
 
-    
     public static int DAILY  = 24*60*60; // = 86400 
     public static int MIN240 =   240*60; 
     public static int MIN120 =   120*60; 
@@ -68,6 +69,12 @@ public class StockTechSys {
     public static int MIN10  =    10*60; 
     public static int MIN5   =     5*60; 
     
+    public static enum TypeListDownload 
+    {   // COmpany List download type
+        ORIGINAL,  // Master list downloaded first time DB is created.
+        TEMPORARY; // Temp List downloaded to compare with master
+    }
+
     // Set Logback properties before it gets loaded.          
     static { System.setProperty("logback.configurationFile", "logback.xml");}    
     public static Logger logger = LoggerFactory.getLogger("StockTechSys Log");
@@ -94,7 +101,11 @@ public class StockTechSys {
         CompanyService companyService = new CompanyService();
         PriceHistoryService priceHistoryService = new PriceHistoryService();
         SqlDatabaseService sqlDatabaseService = new SqlDatabaseService();
-        
+        // To retrieve SymbolList from IEX
+        SymbolService symbolService = new SymbolService();
+        // Will contain symbol only List from Internet.
+        List<Symbol> symbolList = null;
+            
         // Initialize service for Stock price management
  //       PriceHistoryService priceHistoryService = new PriceHistoryService(databaseService);
                 
@@ -119,7 +130,12 @@ public class StockTechSys {
         if (fileOperation.checkFileExist(DATABASEFILENAME)) {
                logger.info("Waiting for user confirmation.");
                createNewDb = AskUserInputNewDatabase();
-               if (createNewDb) { fileOperation.deleteFile(DATABASEFILENAME); }
+               if (createNewDb) { 
+                   if (!fileOperation.deleteFile(DATABASEFILENAME)) {
+                       logger.error("Check if SQL DB File is opened by another application. Exiting");
+                       exit(0);    
+                   }
+               }
         } else createNewDb = true;
        
 //        GooglePriceHistoryDaoImpl stockPriceHistoryDao;
@@ -128,15 +144,21 @@ public class StockTechSys {
         if (createNewDb == true) {
             logger.debug("Creating new Database. Hold on.");
             sqlDatabaseService.createSqlDb();
+            symbolList = symbolService.getSymbolList();
+            symbolService.saveSymbolList(TypeListDownload.ORIGINAL, symbolList);
             // Main method to retrieve stocklist from internet and save to DB.
-            companyService.createCompanyList();
+            companyService.createCompanyList(symbolList);
             // Now get priceHistory and save into DB.            
-            priceHistoryService.createQuotelist();
+            priceHistoryService.createChartlist();
             
   //          status = priceHistoryService.downloadFullDailyPriceHistoryandSavetoDb(); 
 
         } else {    
-            companyService.updateCompanyList();
+            symbolList = symbolService.getSymbolList();
+            symbolService.saveSymbolList(TypeListDownload.TEMPORARY,symbolList);
+            
+            companyService.createCompanyList(symbolList);
+            companyService.updateCompanyList(symbolList);
             
 /* 
             // xxx DO A BACKUP OF DB HERE ??
@@ -228,3 +250,19 @@ dbService.add(stocks);
 */
 // select * from stocklist where SYMBOL LIKE '%/%'
 
+
+
+
+
+/*
+First time
+Download Symbol list and save in Symbol Database
+Download Company List and save in Company Table with link to Symbol ?
+
+Update
+Download Symbol list
+Compare with original symbol list
+Delete table
+Download differences and save into company DB.
+
+*/
