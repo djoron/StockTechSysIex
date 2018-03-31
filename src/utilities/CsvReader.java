@@ -5,7 +5,7 @@
  */
 package utilities;
 
-import static StockTechSys.StockTechSys.logger;
+import static StockTechSys.StockTechSysIex.logger;
 import java.io.IOException;
 import java.util.List;
 

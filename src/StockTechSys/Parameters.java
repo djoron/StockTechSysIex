@@ -5,7 +5,7 @@
  */
 package StockTechSys;
 
-import static StockTechSys.StockTechSys.logger;
+import static StockTechSys.StockTechSysIex.logger;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;

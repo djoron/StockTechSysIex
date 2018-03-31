@@ -1,7 +1,7 @@
 
 package StockTechSys;
 
-/*
+/* Mars 2018 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -43,7 +43,7 @@ import utilities.FileOperations;
  * @author atlantis
  * Main Program
  */
-public class StockTechSys {
+public class StockTechSysIex {
     /**
      * 
      * @param args the command line 
@@ -157,7 +157,9 @@ public class StockTechSys {
             symbolList = symbolService.getSymbolList();
             symbolService.saveSymbolList(TypeListDownload.TEMPORARY,symbolList);
             
-            companyService.createCompanyList(symbolList);
+            // Trim Symbol list to only missing ones
+            
+            // Update with missing symbolList        
             companyService.updateCompanyList(symbolList);
             
 /* 

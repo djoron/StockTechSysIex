@@ -5,8 +5,8 @@
  */
 package dao;
 
-import StockTechSys.StockTechSys.TypeListDownload;
-import static StockTechSys.StockTechSys.logger;
+import StockTechSys.StockTechSysIex.TypeListDownload;
+import static StockTechSys.StockTechSysIex.logger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -46,7 +46,7 @@ public class CompanyDaoImpl implements CompanyDao {
             stmt = null;
             stmt = c.createStatement();
             c.setAutoCommit(false);
-
+            // Just insert, not replace here.
             prepStmt = c.prepareStatement("INSERT INTO COMPANY (SYMBOL, COMPANYNAME, "
                 + "EXCHANGE, INDUSTRY, WEBSITE, DESCRIPTION, CEO, ISSUETYPE, "
                 + "SECTOR) VALUES (?,?,?,?,?,?,?,?,?);");

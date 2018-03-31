@@ -5,7 +5,7 @@
  */
 package dao;
 
-import StockTechSys.StockTechSys.TypeListDownload;
+import StockTechSys.StockTechSysIex.TypeListDownload;
 import java.sql.SQLException;
 import java.util.List;
 import models.Company;

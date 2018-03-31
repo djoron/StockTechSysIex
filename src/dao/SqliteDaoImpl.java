@@ -6,7 +6,7 @@
 package dao;
 
 import static StockTechSys.Parameters.DATABASEFILENAME;
-import static StockTechSys.StockTechSys.logger;
+import static StockTechSys.StockTechSysIex.logger;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -200,7 +200,7 @@ public class SqliteDaoImpl implements SqliteDao {
         return true;
     }
         
-    
+  
      /** 
      *
      * Create SymbolList Table to contain Symbol info.
@@ -210,7 +210,7 @@ public class SqliteDaoImpl implements SqliteDao {
      * @throws java.sql.SQLException
      */
     @Override
-    public boolean createSymbolTables () throws SQLException { 
+    public boolean createSymbolTable () throws SQLException { 
 //        stmt = null;
 //        stmt = c.createStatement();
 
@@ -235,16 +235,32 @@ public class SqliteDaoImpl implements SqliteDao {
             } else {
                 logger.error("createSymbolTable Symbol did not complete.");
             }
+            return true;
         } catch ( Exception e ) {
             logger.error("createSymbolTable Symbol did not complete.");
             logger.error("{} : {}",e.getClass().getName(),e.getMessage() );
+            return false;
         }        
-
-        // Now create temporary symbol table
         
-        logger.info("createSymbolTable Temporary starting"); 
-        query = // FOR NOW delete table if already exists
-                        "CREATE TABLE SYMBOLTEMPORARY " +
+    }
+
+     /** 
+     *
+     * Create SymbolList Table to contain Symbol info.
+     * @version 1.0 
+     * @author : dj
+     * @return true if successful.
+     * @throws java.sql.SQLException
+     */
+    @Override
+    public boolean createSymbolTemporaryTable () throws SQLException { 
+//        stmt = null;
+//        stmt = c.createStatement();
+
+        logger.info("createSymbolTemporaryTable Temporary starting"); 
+        String query = // FOR NOW delete table if already exists
+                       "DROP TABLE IF EXISTS SYMBOLTEMPORARY;" +
+                       "CREATE TABLE SYMBOLTEMPORARY " +
 //                        "(ID INT PRIMARY KEY NOT NULL," +
                        "( SYMBOL             VARCHAR(10) NOT NULL," +                        
                         " NAME               TEXT NOT NULL, " +
@@ -261,12 +277,12 @@ public class SqliteDaoImpl implements SqliteDao {
             if (execStatement(query) == true) {
                 // logger.info("createCompanyTables created successfully"); 
             } else {
-                logger.error("createSymbolTable Temporary did not complete.");
+                logger.error("createSymbolTemporaryTable Temporary did not complete.");
                 return false;
             }
             return true;
         } catch ( Exception e ) {
-            logger.error("createSymbolTable Temporary did not complete.");
+            logger.error("createSymbolTemporaryTable Temporary did not complete.");
             logger.error("{} : {}",e.getClass().getName(),e.getMessage() );
             return false;
         }        
@@ -394,7 +410,37 @@ public class SqliteDaoImpl implements SqliteDao {
         }        
     }
 
+
+    @Override
+    public boolean deleteDuplicateFromStockListTrimDb () throws SQLException { 
+        
+        String query = 
+                         "DELETE FROM STOCKLISTTRIM " +
+                         "WHERE ROWID NOT IN "+
+                         "("+
+                         "SELECT MIN (ROWID) "+
+                         "FROM STOCKLISTTRIM " +
+                         "GROUP BY SYMBOL, EXCHANGE);"
+                ;
+             
+            
+        try {
+            if (execStatement(query) == true) {
+                // logger.info("createCompanyTables created successfully"); 
+                return true;   
+            } else {
+                logger.error("deleteDuplicateFromStockListTrimDb did not complete.");
+                return false;
+            }
+        } catch ( Exception e ) {
+            logger.error("deleteDuplicateFromStockListTrimDb did not complete.");
+            logger.error("{} : {}",e.getClass().getName(),e.getMessage() );
+            return false;
+        }        
+    }
+ 
 }
+
 /* Find duplicate rows with data from 2 columns
 
 SELECT

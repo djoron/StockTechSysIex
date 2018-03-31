@@ -5,8 +5,8 @@
  */
 package service;
 
-import StockTechSys.StockTechSys.TypeListDownload;
-import static StockTechSys.StockTechSys.logger;
+import StockTechSys.StockTechSysIex.TypeListDownload;
+import static StockTechSys.StockTechSysIex.logger;
 import dao.CompanyDao;
 import dao.CompanyDaoImpl;
 import dao.IexDao;
@@ -93,14 +93,20 @@ public class CompanyService {
         // Dao to access internat Data
         IexDao iexDao = new IexDaoImpl() {};
         
+        // xxxx SymbolList is full here. Needs to be trimmed.
+        
         // Use internet to download full Symbol List to populate new DB 
         if (!symbolList.isEmpty()) 
         {
+
+            // xxxx SymbolList is full here. Needs to be trimmed.
+
             // We have data. Build company List, download info from internet.
             List<Company> companyList = iexDao.getCompanyList(symbolList);
             
             if (!companyList.isEmpty()) 
             {
+    
                 // Save in SQL DB.
                 logger.info("updateCompanyList: Downloaded {} elements.",companyList.size());
                 logger.info("updateCompanyList: Saving into DB.",companyList.size());

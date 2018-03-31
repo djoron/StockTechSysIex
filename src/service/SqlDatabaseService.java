@@ -5,7 +5,7 @@
  */
 package service;
 
-import static StockTechSys.StockTechSys.logger;
+import static StockTechSys.StockTechSysIex.logger;
 import dao.SqliteDao;
 import dao.SqliteDaoImpl;
 
@@ -20,7 +20,8 @@ public class SqlDatabaseService {
         SqliteDao sqliteDao = new SqliteDaoImpl();
         boolean status = false;
         
-        status = sqliteDao.createSymbolTables() &&
+        status = sqliteDao.createSymbolTable() &&
+                 sqliteDao.createSymbolTemporaryTable() &&
                  sqliteDao.createCompanyTables() && 
                  sqliteDao.createChartTable() &&
                  sqliteDao.createQuoteTable();

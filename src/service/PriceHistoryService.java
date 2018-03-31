@@ -7,7 +7,7 @@ package service;
 
 import static StockTechSys.Parameters.MAXSTOCKTOPROCESS;
 import static StockTechSys.Parameters.YEAR_HISTORY_STRING;
-import static StockTechSys.StockTechSys.logger;
+import static StockTechSys.StockTechSysIex.logger;
 import dao.ChartDao;
 import dao.ChartDaoImpl;
 import dao.IexDao;

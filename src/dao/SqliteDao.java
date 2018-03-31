@@ -21,9 +21,9 @@ public interface SqliteDao {
     public PreparedStatement execPrepStatementRead(String sql, boolean returnGeneratedKeys, Object... objets ) throws SQLException;
     // public PreparedStatement execPrepStatementWrite(String sql, boolean returnGeneratedKeys, Object... objets ) throws SQLException;
     public boolean createCompanyTables () throws SQLException;
-    public boolean createSymbolTables () throws SQLException;
+    public boolean createSymbolTable () throws SQLException;
+    public boolean createSymbolTemporaryTable () throws SQLException;
     public boolean createQuoteTable () throws SQLException; 
     public boolean createChartTable () throws SQLException;
-    
-    
+    public boolean deleteDuplicateFromStockListTrimDb () throws SQLException;
 }

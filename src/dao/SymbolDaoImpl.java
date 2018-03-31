@@ -5,8 +5,8 @@
  */
 package dao;
 
-import StockTechSys.StockTechSys.TypeListDownload;
-import static StockTechSys.StockTechSys.logger;
+import StockTechSys.StockTechSysIex.TypeListDownload;
+import static StockTechSys.StockTechSysIex.logger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,7 +14,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import models.Company;
 import models.Symbol;
 
 /**
@@ -28,7 +27,10 @@ public class SymbolDaoImpl implements SymbolDao {
     }
     
     /**
-     * Save Company Downloaded from internet into DB. 
+     * Save Company Downloaded from internet into DB. Method downloads temporary
+     * or first time symbol list. Temporary is for comparison and update purposes.
+     * @param symbolList : List of symbols used to build IEX company list
+     * @param val : Temporary or permanent symbol list type
      * @return
      * @throws Exception
      */
@@ -40,14 +42,16 @@ public class SymbolDaoImpl implements SymbolDao {
         PreparedStatement prepStmt = null;
         
         Connection c = sqliteDao.openSqlDatabase();
-
+       // Delete old Temp table
+        sqliteDao.createSymbolTemporaryTable();
+        
         if (symbolList.size() > 0) {
             stmt = null;
             stmt = c.createStatement();
             c.setAutoCommit(false);
                 
             if (val == TypeListDownload.TEMPORARY) {
-            prepStmt = c.prepareStatement("INSERT INTO TEMPORARYSYMBOL (SYMBOL, NAME, "
+            prepStmt = c.prepareStatement("INSERT INTO SYMBOLTEMPORARY (SYMBOL, NAME, "
                     + "DATE, ISENABLED, TYPE, IEXID) VALUES (?,?,?,?,?,?);");
             } else {
                 prepStmt = c.prepareStatement("INSERT INTO SYMBOL  (SYMBOL, NAME, "

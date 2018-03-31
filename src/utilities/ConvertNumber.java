@@ -5,7 +5,7 @@
  */
 package utilities;
 
-import static StockTechSys.StockTechSys.logger;
+import static StockTechSys.StockTechSysIex.logger;
 
 /**
  * This class will convert Numbers in notation such as 1.3M into a long value.

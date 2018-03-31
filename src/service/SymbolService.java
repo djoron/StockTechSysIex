@@ -5,8 +5,8 @@
  */
 package service;
 
-import StockTechSys.StockTechSys.TypeListDownload;
-import static StockTechSys.StockTechSys.logger;
+import StockTechSys.StockTechSysIex.TypeListDownload;
+import static StockTechSys.StockTechSysIex.logger;
 import dao.IexDao;
 import dao.IexDaoImpl;
 import dao.SymbolDao;
