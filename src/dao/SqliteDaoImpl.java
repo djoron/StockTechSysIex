@@ -165,12 +165,14 @@ public class SqliteDaoImpl implements SqliteDao {
     public boolean createCompanyTables () throws SQLException { 
 //        stmt = null;
 //        stmt = c.createStatement();
+// Sqlite Doc for Integer Primary key (or Row ID)
+// https://sqlite.org/autoinc.html
 
         logger.info("createCompanyTable Company starting"); 
         String query = // FOR NOW delete table if already exists
                         "CREATE TABLE COMPANY " +
-//                        "(ID INT PRIMARY KEY NOT NULL," +
-                        "( SYMBOL             VARCHAR(10) NOT NULL," +                        
+                        "(companyID INTEGER PRIMARY KEY," +
+                        " SYMBOL             VARCHAR(10) NOT NULL," +                        
                         " COMPANYNAME        TEXT NOT NULL, " +
                         " EXCHANGE           TEXT, " +
                         " INDUSTRY           TEXT, " + 
@@ -180,10 +182,11 @@ public class SqliteDaoImpl implements SqliteDao {
                         " ISSUETYPE          TEXT, " +
                         " SECTOR             TEXT, " +
 //                       " OBSOLETE           INTEGER,  " +
-                        " UNIQUE (SYMBOL, EXCHANGE) ON CONFLICT IGNORE " +
+                        " UNIQUE (SYMBOL, EXCHANGE) ON CONFLICT IGNORE, " +
+                        " FOREIGN KEY(SYMBOL) REFERENCES SYMBOL(SYMBOL) " +
                         ");" +
-                        "CREATE UNIQUE INDEX SYMBOL_IDX_COMPANYTABLE ON COMPANY(SYMBOL,EXCHANGE);"
-                ;
+                        "CREATE UNIQUE INDEX SYMBOL_IDX_COMPANYTABLE ON COMPANY(SYMBOL,EXCHANGE);";
+                    ;
         try {
             
             if (execStatement(query) == true) {
@@ -217,8 +220,8 @@ public class SqliteDaoImpl implements SqliteDao {
         logger.info("createSymbolTable Symbol starting"); 
         String query = // FOR NOW delete table if already exists
                         "CREATE TABLE SYMBOL " +
-//                        "(ID INT PRIMARY KEY NOT NULL," +
-                        "( SYMBOL             VARCHAR(10) NOT NULL," +                        
+                        "(symbolID INTEGER PRIMARY KEY," +
+                        " SYMBOL             VARCHAR(10) NOT NULL," +                        
                         " NAME               TEXT NOT NULL, " +
                         " DATE               TEXT, " +
                         " ISENABLED          TEXT, " + 
@@ -227,7 +230,7 @@ public class SqliteDaoImpl implements SqliteDao {
                         " UNIQUE (SYMBOL) ON CONFLICT REPLACE " +
                         ");" +
                         "CREATE UNIQUE INDEX SYMBOL_IDX_SYMBOLTABLE ON SYMBOL(SYMBOL);"
-                ;
+                ;   
         try {
             
             if (execStatement(query) == true) {
@@ -261,16 +264,16 @@ public class SqliteDaoImpl implements SqliteDao {
         String query = // FOR NOW delete table if already exists
                        "DROP TABLE IF EXISTS SYMBOLTEMPORARY;" +
                        "CREATE TABLE SYMBOLTEMPORARY " +
-//                        "(ID INT PRIMARY KEY NOT NULL," +
-                       "( SYMBOL             VARCHAR(10) NOT NULL," +                        
-                        " NAME               TEXT NOT NULL, " +
-                        " DATE               TEXT, " +
-                        " ISENABLED          TEXT, " + 
-                        " TYPE               TEXT, " +
-                        " IEXID              TEXT, " +
-                        " UNIQUE (SYMBOL) ON CONFLICT REPLACE " +
-                        ");" +
-                        "CREATE UNIQUE INDEX SYMBOL_IDX_SYMBOLTEMPTABLE ON SYMBOLTEMPORARY(SYMBOL);"
+                       "(symbolTempID INTEGER PRIMARY KEY," +
+                       " SYMBOL             VARCHAR(10) NOT NULL," +                        
+                       " NAME               TEXT NOT NULL, " +
+                       " DATE               TEXT, " +
+                       " ISENABLED          TEXT, " + 
+                       " TYPE               TEXT, " +
+                       " IEXID              TEXT, " +
+                       " UNIQUE (SYMBOL) ON CONFLICT REPLACE " +
+                       ");" +
+                       "CREATE UNIQUE INDEX SYMBOL_IDX_SYMBOLTEMPTABLE ON SYMBOLTEMPORARY(SYMBOL);"
                 ;
         try {
             
@@ -304,7 +307,8 @@ public class SqliteDaoImpl implements SqliteDao {
         logger.info("createQuoteTable starting"); 
         String query = // FOR NOW delete table if already exists
                            "CREATE TABLE QUOTE " +
-                           "(SYMBOL       VARCHAR(10) NOT NULL," +
+                           "(quoteID INTEGER PRIMARY KEY," +
+                           " SYMBOL       VARCHAR(10) NOT NULL," +
                            " COMPANYNAME            TEXT, " +
                            " PRIMARYEXCHANGE         TEXT, " +
                            " SECTOR                 TEXT, " +
@@ -376,7 +380,8 @@ public class SqliteDaoImpl implements SqliteDao {
         // logger.info("createChartTable starting"); 
         String query = // FOR NOW delete table if already exists
                            "CREATE TABLE CHART " +
-                           "(SYMBOL       VARCHAR(10) NOT NULL," +
+                           "(chartID INTEGER PRIMARY KEY," +
+                           " SYMBOL       VARCHAR(10) NOT NULL," +
                            " DATE                   TEXT, " +
                            " OPEN                   TEXT, " +
                            " HIGH                   TEXT, " +
